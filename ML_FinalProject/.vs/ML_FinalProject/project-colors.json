@@ -1,0 +1,21 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "dad53f88-0fb0-4e5f-bcf6-6d1334c23437": {
+      "ProjectGuid": "dad53f88-0fb0-4e5f-bcf6-6d1334c23437",
+      "DisplayName": "SuperTicTacToe",
+      "ColorIndex": 0
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Miscellaneous Files",
+      "ColorIndex": -1
+    },
+    "a27a2957-8b46-45ed-9c4c-5ad2cf8f4b4c": {
+      "ProjectGuid": "a27a2957-8b46-45ed-9c4c-5ad2cf8f4b4c",
+      "DisplayName": "TTTEngine",
+      "ColorIndex": 1
+    }
+  },
+  "NextColorIndex": 2
+}
