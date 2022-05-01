@@ -20,7 +20,7 @@ namespace SuperTicTacToe
         // Counts how many turns have occurred in each board
         private int[] turns = new int[10];
         // Remembers whose turn it is
-        private bool turn;
+        //private bool turn;
 
 
         ////////////////////////////////
@@ -28,7 +28,7 @@ namespace SuperTicTacToe
         ////////////////////////////////
 
         //returns the current game state, including the global board tiles, current focus board, and player turn
-        public (int[], int[], int, bool) GetGameInfo()
+        public (int[], int[], int) GetGameInfo()
         {
             // If a board is focused
             if (this.focus_board > -1)
@@ -42,7 +42,7 @@ namespace SuperTicTacToe
                 this.tiles[90 + this.focus_board] = 1; //set the focus board
                 this.tiles[90 + this.focus_board] = 1;
             }
-            return (this.tiles, this.tiles_inverted, this.focus_board, this.turn);
+            return (this.tiles, this.tiles_inverted, this.focus_board);
         }
 
         // Refer to Place
@@ -101,6 +101,7 @@ namespace SuperTicTacToe
         // Constructor
         public Game(bool randomPlayer)
         {
+            /*
             if (randomPlayer)
             {
                 Random random = new Random();
@@ -110,6 +111,7 @@ namespace SuperTicTacToe
             {
                 this.turn = true;
             }
+            */
         }
 
         // Simple way to update both boards at the same time
@@ -132,10 +134,10 @@ namespace SuperTicTacToe
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int ChooseBoard(int board, bool player)
         {
-            if (player != this.turn)
-            {
-                return -2;
-            }
+            //if (player != this.turn)
+            //{
+            //    return -2;
+            //}
             // Player is allowed to choose the board and that board has not been won
             if (this.focus_board == -1 && this.tiles[81 + board] == 0)
             {
@@ -155,10 +157,10 @@ namespace SuperTicTacToe
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int Place(int tile, bool player)
         {
-            if (player != this.turn)
-            {
-                return -2;
-            }
+            //if (player != this.turn)
+            //{
+            //    return -2;
+            //}
 
             // Checks if we can place at this location
             if (this.tiles[81 + this.focus_board] == 0 && this.tiles[tile + 9 * this.focus_board] == 0)
@@ -173,7 +175,7 @@ namespace SuperTicTacToe
                 this.turns[9] += 1;
 
                 // Flip whoever's turn it is
-                this.turn = !this.turn;
+                //this.turn = !this.turn;
 
                 // Checks for win
                 int ret = PlaceResult(tile, player);
