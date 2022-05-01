@@ -65,6 +65,15 @@ namespace SuperTicTacToe
                 return;
             }
 
+            if (resultPlayer == 1)
+            {
+                for (int i = 0; i < 9; i++)
+                {
+                    buttons[(tile / 9) * 9 + i].Text = "X";
+                    buttons[(tile / 9) * 9 + i].BackColor = Color.Aquamarine;
+                }
+            }
+
             buttons[tile].Text = "X";
 
             AIButtonClick(tile % 9);

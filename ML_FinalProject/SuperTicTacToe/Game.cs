@@ -101,6 +101,11 @@ namespace SuperTicTacToe
         // Constructor
         public Game(bool randomPlayer)
         {
+            for (int i = 0; i < 160; i++)
+            {
+                this.win_events[i] = true;
+            }
+
             /*
             if (randomPlayer)
             {
