@@ -116,17 +116,17 @@ namespace SuperTicTacToe
 
         // Simple way to update both boards at the same time
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void UpdateTile(int tile, bool player)
+        public void UpdateTile(int global_tile, bool player)
         {
             if (player)
             {
-                this.tiles[tile] = 1;
-                this.tiles_inverted[tile] = -1;
+                this.tiles[global_tile] = 1;
+                this.tiles_inverted[global_tile] = -1;
             }
             else
             {
-                this.tiles[tile] = -1;
-                this.tiles_inverted[tile] = 1;
+                this.tiles[global_tile] = -1;
+                this.tiles_inverted[global_tile] = 1;
             }
         }
 
@@ -155,7 +155,7 @@ namespace SuperTicTacToe
 
         //-4: game tied, -3: board tied, -2: wrong player, -1: failed to place, 0: placed correctly, 1: local win, 2: game win
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public int Place(int tile, bool player)
+        public int Place(int local_tile, bool player)
         {
             //if (player != this.turn)
             //{
@@ -163,10 +163,10 @@ namespace SuperTicTacToe
             //}
 
             // Checks if we can place at this location
-            if (this.tiles[81 + this.focus_board] == 0 && this.tiles[tile + 9 * this.focus_board] == 0)
+            if (this.tiles[81 + this.focus_board] == 0 && this.tiles[local_tile + 9 * this.focus_board] == 0)
             {
                 // Updates the tile
-                UpdateTile(tile + 9 * this.focus_board, player);
+                UpdateTile(local_tile + 9 * this.focus_board, player);
 
                 // Increments turn number for specific board
                 this.turns[this.focus_board] += 1;
@@ -178,9 +178,9 @@ namespace SuperTicTacToe
                 //this.turn = !this.turn;
 
                 // Checks for win
-                int ret = PlaceResult(tile, player);
+                int ret = PlaceResult(local_tile, player);
 
-                UpdateFocusBoard(tile);
+                UpdateFocusBoard(local_tile);
 
                 // If any win detected, return
                 if (ret > 0)
