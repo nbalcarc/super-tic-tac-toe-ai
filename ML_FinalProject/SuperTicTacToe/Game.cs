@@ -30,18 +30,19 @@ namespace SuperTicTacToe
         //returns the current game state, including the global board tiles, current focus board, and player turn
         public (int[], int[], int) GetGameInfo()
         {
+            //Note: this whole if statement is solely for neural networks
             // If a board is focused
-            //if (this.focus_board > -1)
-            //{
-            //    // Clear out focused board
-            //    for (int i = 90; i < 99; i++)
-            //    {
-            //        this.tiles[i] = 0;
-            //        this.tiles_inverted[i] = 0;
-            //    }
-            //    this.tiles[90 + this.focus_board] = 1; //set the focus board
-            //    this.tiles[90 + this.focus_board] = 1;
-            //}
+            if (this.focus_board > -1)
+            {
+                // Clear out focused board
+                for (int i = 90; i < 99; i++)
+                {
+                    this.tiles[i] = 0;
+                    this.tiles_inverted[i] = 0;
+                }
+                this.tiles[90 + this.focus_board] = 1; //set the focus board
+                this.tiles[90 + this.focus_board] = 1;
+            }
             return (this.tiles, this.tiles_inverted, this.focus_board);
         }
 
@@ -190,6 +191,7 @@ namespace SuperTicTacToe
                 // If any win detected, return
                 if (ret > 0)
                 {
+                    this.focus_board = -1; //if a win has taken place, let the other player choose their board
                     return ret;
                 }
 
@@ -202,7 +204,7 @@ namespace SuperTicTacToe
                 // Tied or already won the newly focused board
                 if (this.focus_board == -1 || this.turns[this.focus_board] == 9 || this.tiles[90 + this.focus_board] != 0)
                 {
-                    Console.WriteLine($"DEBUGGING first in return -3: {this.focus_board == -1}");
+                    //Console.WriteLine($"DEBUGGING first in return -3: {this.focus_board == -1}");
                     return -3;
                 }
 

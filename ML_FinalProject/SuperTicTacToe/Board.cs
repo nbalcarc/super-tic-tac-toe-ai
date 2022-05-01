@@ -18,6 +18,7 @@ namespace SuperTicTacToe
         
 
         Game ttt = new Game(false);
+        AI ai = new AI();
 
         public Board()
         {
@@ -97,7 +98,65 @@ namespace SuperTicTacToe
                     break;
             }
 
-            AIButtonClick(localTile);
+            //AIButtonClick(localTile); //old ai based on random generation
+            SmartAIButtonClick(); //new ai based on neural network (no learning yet, just random weights)
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void SmartAIButtonClick()
+        {
+            (int[], int[], int) state = ttt.GetGameInfo();
+            if (state.Item3 == -1) //first either choose a new board or pass the current one
+			{
+                ttt.ChooseBoardSecondPlayer(ai.ChooseBoard(state.Item2, false));
+			} else
+			{
+                ttt.ChooseBoardSecondPlayer(state.Item3);
+			}
+
+            int resultPlace, localTile, board;
+            state = ttt.GetGameInfo(); //update the new info
+
+            localTile = ai.NextMove(state.Item2, state.Item3);
+            resultPlace = ttt.PlaceSecondPlayer(localTile);
+            board = state.Item3;
+
+            switch (resultPlace)
+            {
+                case 0: //successful place
+                    buttons[board * 9 + localTile].Text = "O";
+                    int tempBoard = ttt.GetGameInfo().Item3;
+                    for (int i = 0; i < 9; i++)
+                    {
+                        if (i == tempBoard)
+                        {
+                            highlights[tempBoard].Visible = true;
+                            continue;
+                        }
+                        highlights[i].Visible = false;
+                    }
+                    break;
+                case 1: //local win
+                    for (int i = 0; i < 9; i++) //claim all tiles
+                    {
+                        buttons[board * 9 + i].Text = "O";
+                        buttons[board * 9 + i].BackColor = Color.OrangeRed;
+
+
+                    }
+                    for (int i = 0; i < 9; i++) //highlight all boards as long as they're not claimed
+                    {
+                        if (state.Item1[81 + i] == 0)
+                        {
+                            highlights[i].Visible = true;
+                        }
+                    }
+                    break;
+                case 2: //global win
+                    // TODO FILL THIS IN LATER
+                    break;
+            }
+
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
