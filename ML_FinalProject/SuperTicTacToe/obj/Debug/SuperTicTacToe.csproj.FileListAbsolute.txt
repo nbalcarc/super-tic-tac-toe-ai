@@ -9,3 +9,14 @@ C:\Users\josep\OneDrive\Documents\WSU\(5) Spring 2021\Cpts 437\Final Project\ML_
 C:\Users\josep\OneDrive\Documents\WSU\(5) Spring 2021\Cpts 437\Final Project\ML_FinalProject\SuperTicTacToe\bin\Debug\SuperTicTacToe.pdb
 C:\Users\josep\OneDrive\Documents\WSU\(5) Spring 2021\Cpts 437\Final Project\ML_FinalProject\SuperTicTacToe\obj\Debug\SuperTicTacToe.exe
 C:\Users\josep\OneDrive\Documents\WSU\(5) Spring 2021\Cpts 437\Final Project\ML_FinalProject\SuperTicTacToe\obj\Debug\SuperTicTacToe.pdb
+C:\Users\josep\OneDrive\Documents\WSU\(5) Spring 2021\Cpts 437\Final Project\Github\super-tic-tac-toe-ai\ML_FinalProject\SuperTicTacToe\obj\Debug\SuperTicTacToe.csproj.AssemblyReference.cache
+C:\Users\josep\OneDrive\Documents\WSU\(5) Spring 2021\Cpts 437\Final Project\Github\super-tic-tac-toe-ai\ML_FinalProject\SuperTicTacToe\obj\Debug\SuperTicTacToe.csproj.SuggestedBindingRedirects.cache
+C:\Users\josep\OneDrive\Documents\WSU\(5) Spring 2021\Cpts 437\Final Project\Github\super-tic-tac-toe-ai\ML_FinalProject\SuperTicTacToe\obj\Debug\SuperTicTacToe.Board.resources
+C:\Users\josep\OneDrive\Documents\WSU\(5) Spring 2021\Cpts 437\Final Project\Github\super-tic-tac-toe-ai\ML_FinalProject\SuperTicTacToe\obj\Debug\SuperTicTacToe.Properties.Resources.resources
+C:\Users\josep\OneDrive\Documents\WSU\(5) Spring 2021\Cpts 437\Final Project\Github\super-tic-tac-toe-ai\ML_FinalProject\SuperTicTacToe\obj\Debug\SuperTicTacToe.csproj.GenerateResource.cache
+C:\Users\josep\OneDrive\Documents\WSU\(5) Spring 2021\Cpts 437\Final Project\Github\super-tic-tac-toe-ai\ML_FinalProject\SuperTicTacToe\obj\Debug\SuperTicTacToe.csproj.CoreCompileInputs.cache
+C:\Users\josep\OneDrive\Documents\WSU\(5) Spring 2021\Cpts 437\Final Project\Github\super-tic-tac-toe-ai\ML_FinalProject\SuperTicTacToe\obj\Debug\SuperTicTacToe.exe
+C:\Users\josep\OneDrive\Documents\WSU\(5) Spring 2021\Cpts 437\Final Project\Github\super-tic-tac-toe-ai\ML_FinalProject\SuperTicTacToe\obj\Debug\SuperTicTacToe.pdb
+C:\Users\josep\OneDrive\Documents\WSU\(5) Spring 2021\Cpts 437\Final Project\Github\super-tic-tac-toe-ai\ML_FinalProject\SuperTicTacToe\bin\Debug\SuperTicTacToe.exe.config
+C:\Users\josep\OneDrive\Documents\WSU\(5) Spring 2021\Cpts 437\Final Project\Github\super-tic-tac-toe-ai\ML_FinalProject\SuperTicTacToe\bin\Debug\SuperTicTacToe.exe
+C:\Users\josep\OneDrive\Documents\WSU\(5) Spring 2021\Cpts 437\Final Project\Github\super-tic-tac-toe-ai\ML_FinalProject\SuperTicTacToe\bin\Debug\SuperTicTacToe.pdb

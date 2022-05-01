@@ -34,8 +34,8 @@ namespace SuperTicTacToe {
                     return ordered[i];
                 }
             }
-            Console.WriteLine($"DEBUGGING, returned -1 as next move");
-            Console.WriteLine($"DEBUGGING ######### {board[80]}, {board[81]}, {board[82]}, {board[83]}, {board[84]}, {board[85]}, {board[86]}, {board[87]}, {board[88]}");
+            //Console.WriteLine($"DEBUGGING, returned -1 as next move");
+            //Console.WriteLine($"DEBUGGING ######### {board[80]}, {board[81]}, {board[82]}, {board[83]}, {board[84]}, {board[85]}, {board[86]}, {board[87]}, {board[88]}");
             return -1;
         }
 
