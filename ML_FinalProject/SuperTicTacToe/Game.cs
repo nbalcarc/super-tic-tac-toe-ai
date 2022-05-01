@@ -31,17 +31,17 @@ namespace SuperTicTacToe
         public (int[], int[], int) GetGameInfo()
         {
             // If a board is focused
-            if (this.focus_board > -1)
-            {
-                // Clear out focused board
-                for (int i = 90; i < 99; i++)
-                {
-                    this.tiles[i] = 0;
-                    this.tiles_inverted[i] = 0;
-                }
-                this.tiles[90 + this.focus_board] = 1; //set the focus board
-                this.tiles[90 + this.focus_board] = 1;
-            }
+            //if (this.focus_board > -1)
+            //{
+            //    // Clear out focused board
+            //    for (int i = 90; i < 99; i++)
+            //    {
+            //        this.tiles[i] = 0;
+            //        this.tiles_inverted[i] = 0;
+            //    }
+            //    this.tiles[90 + this.focus_board] = 1; //set the focus board
+            //    this.tiles[90 + this.focus_board] = 1;
+            //}
             return (this.tiles, this.tiles_inverted, this.focus_board);
         }
 
@@ -166,7 +166,7 @@ namespace SuperTicTacToe
             if (this.tiles[81 + this.focus_board] == 0 && this.tiles[tile + 9 * this.focus_board] == 0)
             {
                 // Updates the tile
-                UpdateTile(tile, player);
+                UpdateTile(tile + 9 * this.focus_board, player);
 
                 // Increments turn number for specific board
                 this.turns[this.focus_board] += 1;

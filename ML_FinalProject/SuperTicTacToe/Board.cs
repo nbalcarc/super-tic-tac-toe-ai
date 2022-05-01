@@ -83,13 +83,15 @@ namespace SuperTicTacToe
             {
                 do
                 {
-                    tile = r.Next(0, 9);
+                    tile = r.Next(0,9);
                 } while (buttons[prevBoard * 9 + tile].Text == "X" || buttons[prevBoard * 9 + tile].Text == "O");
 
                 success = ttt.PlaceSecondPlayer(tile);
             } while (success < 0);
 
             buttons[prevBoard * 9 + tile].Text = "O";
+
+            this.TextBox.Text = ttt.GetGameInfo().Item3.ToString();
         }
 
         private void TLTL_Click(object sender, EventArgs e)

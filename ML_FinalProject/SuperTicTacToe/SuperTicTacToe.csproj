@@ -53,7 +53,7 @@
       <DependentUpon>Board.cs</DependentUpon>
     </Compile>
     <Compile Include="Game.cs" />
-    <Compile Include="NN.cs" />
+    <Compile Include="NeuralNetwork.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Board.resx">
