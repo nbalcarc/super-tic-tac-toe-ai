@@ -49,13 +49,23 @@ namespace SuperTicTacToe
         // Refer to Place
         public int PlaceFirstPlayer(int local_tile)
         {
-            return Place(local_tile, true);
+            int ret = Place(local_tile, true);
+            if (ret > -1)
+			{
+                UpdateFocusBoard(local_tile);
+            }
+            return ret;
         }
 
         // Refer to Place
         public int PlaceSecondPlayer(int local_tile)
         {
-            return Place(local_tile, false);
+            int ret = Place(local_tile, false);
+            if (ret > -1)
+            {
+                UpdateFocusBoard(local_tile);
+            }
+            return ret;
         }
 
         // Refer to ChooseBoard
@@ -186,7 +196,8 @@ namespace SuperTicTacToe
                 // Checks for win
                 int ret = PlaceResult(local_tile, player);
 
-                UpdateFocusBoard(local_tile);
+                //int current_focus_board = this.focus_board;
+                //UpdateFocusBoard(local_tile);
 
                 // If any win detected, return
                 if (ret > 0)
@@ -202,7 +213,7 @@ namespace SuperTicTacToe
                 }
 
                 // Tied or already won the newly focused board
-                if (this.focus_board == -1 || this.turns[this.focus_board] == 9 || this.tiles[90 + this.focus_board] != 0)
+                if (this.focus_board == -1 || this.turns[this.focus_board] == 9 || this.tiles[81 + this.focus_board] != 0)
                 {
                     //Console.WriteLine($"DEBUGGING first in return -3: {this.focus_board == -1}");
                     return -3;
@@ -212,7 +223,7 @@ namespace SuperTicTacToe
             }
 
             // Blocked place location
-            if (this.focus_board == -1 || this.turns[this.focus_board] == 9 || this.tiles[90 + this.focus_board] != 0)
+            if (this.focus_board == -1 || this.turns[this.focus_board] == 9 || this.tiles[81 + this.focus_board] != 0)
             { 
                 return -3;
             }

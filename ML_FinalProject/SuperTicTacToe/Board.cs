@@ -107,12 +107,15 @@ namespace SuperTicTacToe
         {
             (int[], int[], int) state = ttt.GetGameInfo();
             if (state.Item3 == -1) //first either choose a new board or pass the current one
-			{
+            {
+                Console.WriteLine($"DEBUGGING, choosing board");
                 ttt.ChooseBoardSecondPlayer(ai.ChooseBoard(state.Item2, false));
-			} else
-			{
+            } else
+            {
+                Console.WriteLine($"DEBUGGING, reusing board");
                 ttt.ChooseBoardSecondPlayer(state.Item3);
-			}
+            }
+            Console.WriteLine($"DEBUGGING board: {state.Item3}");
 
             int resultPlace, localTile, board;
             state = ttt.GetGameInfo(); //update the new info
@@ -121,11 +124,15 @@ namespace SuperTicTacToe
             resultPlace = ttt.PlaceSecondPlayer(localTile);
             board = state.Item3;
 
+            Console.WriteLine($"DEBUGGING tile: {localTile}");
+            Console.WriteLine($"DEBUGGING result: {resultPlace}");
+
+            int tempBoard;
             switch (resultPlace)
             {
                 case 0: //successful place
                     buttons[board * 9 + localTile].Text = "O";
-                    int tempBoard = ttt.GetGameInfo().Item3;
+                    tempBoard = ttt.GetGameInfo().Item3;
                     for (int i = 0; i < 9; i++)
                     {
                         if (i == tempBoard)
@@ -136,26 +143,39 @@ namespace SuperTicTacToe
                         highlights[i].Visible = false;
                     }
                     break;
+                case 2: //global win
+                        // TODO FILL THIS IN LATER, SIGNAL TO PROGRAM THAT GAME IS WON
                 case 1: //local win
                     for (int i = 0; i < 9; i++) //claim all tiles
                     {
                         buttons[board * 9 + i].Text = "O";
                         buttons[board * 9 + i].BackColor = Color.OrangeRed;
-
-
                     }
-                    for (int i = 0; i < 9; i++) //highlight all boards as long as they're not claimed
+                    tempBoard = ttt.GetGameInfo().Item3;
+                    for (int i = 0; i < 9; i++)
                     {
-                        if (state.Item1[81 + i] == 0)
+                        if (i == tempBoard)
                         {
-                            highlights[i].Visible = true;
+                            highlights[tempBoard].Visible = true;
+                            continue;
                         }
+                        highlights[i].Visible = false;
                     }
-                    break;
-                case 2: //global win
-                    // TODO FILL THIS IN LATER
                     break;
             }
+
+            state = ttt.GetGameInfo(); //update the new info
+            if (state.Item3 == -1) //first either choose a new board or pass the current one
+            {
+                for (int i = 0; i < 9; i++) //highlight all boards as long as they're not claimed
+                {
+                    if (state.Item1[81 + i] == 0)
+                    {
+                        highlights[i].Visible = true;
+                    }
+                }
+            }
+            
 
         }
 
