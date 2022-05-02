@@ -191,7 +191,7 @@ namespace SuperTicTacToe
                 // If any win detected, return
                 if (ret > 0)
                 {
-                    this.focus_board = -1; //if a win has taken place, let the other player choose their board
+                    //this.focus_board = -1; //if a win has taken place, let the other player choose their board
                     return ret;
                 }
 

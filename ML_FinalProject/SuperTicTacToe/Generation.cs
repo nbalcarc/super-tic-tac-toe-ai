@@ -1,3 +1,5 @@
+using System;
+
 namespace SuperTicTacToe {
 
     public class Generation {
@@ -78,7 +80,7 @@ namespace SuperTicTacToe {
             int score = 0, score1 = 0;
             bool new_board = false;
             for (int i = 0; i < 3; i++) { //play 3 games
-                game = new Game();
+                game = new Game(true);
                 
 
                 //out of the game loop now, game has finished for one reason or another
