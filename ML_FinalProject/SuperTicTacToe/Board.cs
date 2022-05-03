@@ -16,8 +16,9 @@ namespace SuperTicTacToe
         private Button[] buttons;
         private PictureBox[] highlights;
         private bool gameWon;
-        
 
+
+        Generation g = new Generation();
         Game ttt = new Game();
         AI ai = new AI();
 
@@ -25,14 +26,14 @@ namespace SuperTicTacToe
         {
             InitializeComponent();
 
-            ttt.focus_board = 8;
+            //ttt.focus_board = 8;
 
-            for (int i= 0; i < 8; i++)
-            {
-                ttt.tiles[81 + i] = -2;
-                ttt.tiles_inverted[81 + i] = -2;
+            //for (int i= 0; i < 8; i++)
+            //{
+            //    ttt.tiles[81 + i] = -2;
+            //    ttt.tiles_inverted[81 + i] = -2;
 
-            }
+            //}
 
             gameWon = false;
 
@@ -700,6 +701,14 @@ namespace SuperTicTacToe
         private void BRBR_Click(object sender, EventArgs e)
         {
             UpdateText(80, true);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                g.NextGeneration();
+            }
         }
     }
 }
