@@ -50,7 +50,7 @@ namespace SuperTicTacToe
         public int PlaceFirstPlayer(int local_tile)
         {
             int ret = Place(local_tile, true);
-            if (ret > -1 || ret == -3 || ret == -4)
+            if (ret > -1 || ret == -3 || ret == -4) //if a successful place has occurred, update the board
 			{
                 UpdateFocusBoard(local_tile);
             }
@@ -169,7 +169,7 @@ namespace SuperTicTacToe
             return -1;
         }
 
-        //-4: game tied, -3: board tied, -2: wrong player, -1: failed to place, 0: placed correctly, 1: local win, 2: game win
+        //-5: -4 and -3, -4: game tied, -3: board tied, -2: wrong player, -1: failed to place, 0: placed correctly, 1: local win, 2: game win
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int Place(int local_tile, bool player)
         {
@@ -207,30 +207,10 @@ namespace SuperTicTacToe
                 }
 
                 // Tied the game
-                if (this.turns[9] == 81)
-                {
-                    return -4;
-                }
-                int ties = 0, p1 = 0, p2 = 0;
-                for (int i = 0; i < 9; i++)
-                {
-                    if (this.turns[i] == 9)
-                    { //local tie
-                        ties++;
-                    }
-                    else if (this.tiles[81 + i] == 1)
-                    { //p1
-                        p1++;
-                    }
-                    else if (this.tiles[81 + i] == -1)
-                    {
-                        p2++;
-                    }
-                }
-                if (ties + p1 + p2 == 9)
-                { //all boards are either tied or won, and no one has won the game
-                    return -4;
-                }
+                //if (this.turns[9] == 81)
+                //{
+                //    return -4;
+                //}
 
                 // Tied or already won the newly focused board
                 if (this.focus_board == -1 || this.turns[this.focus_board] == 9 || this.tiles[81 + this.focus_board] != 0)

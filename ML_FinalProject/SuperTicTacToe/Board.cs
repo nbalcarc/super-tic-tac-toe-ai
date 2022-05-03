@@ -102,19 +102,6 @@ namespace SuperTicTacToe
 
             switch (resultPlace)
 			{
-                case -4:
-                    buttons[globalTile].Text = "X";
-                    for (int i = 0; i < 81; i++)
-                    {
-                        buttons[i].BackColor = Color.Gray;
-                    }
-                    for (int i = 0; i < 9; i++)
-                    {
-                        highlights[i].Visible = false;
-                    }
-                    this.TextBox.Text = "Tie game!";
-                    gameWon = true;
-                    break;
                 case -3:
                     buttons[globalTile].Text = "X";
                     for (int i = 0; i < 9; i++)
@@ -149,12 +136,19 @@ namespace SuperTicTacToe
                     return;
             }
 
+            if (TieDetector(board))
+			{
+                return;
+			}
+
             //AIButtonClick(localTile); //old ai based on random generation
-            SmartAIButtonClick(); //new ai based on neural network (no learning yet, just random weights)
+            board = SmartAIButtonClick(); //new ai based on neural network (no learning yet, just random weights)
+
+            TieDetector(board);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SmartAIButtonClick()
+        public int SmartAIButtonClick()
         {
             (int[], int[], int) state = ttt.GetGameInfo();
             if (state.Item3 == -1) //first either choose a new board or pass the current one
@@ -182,15 +176,6 @@ namespace SuperTicTacToe
             int tempBoard;
             switch (resultPlace)
             {
-                case -4:
-                    buttons[board * 9 + localTile].Text = "O";
-                    for (int i = 0; i < 9; i++)
-                    {
-                        highlights[i].Visible = false;
-                    }
-                    this.TextBox.Text = "Game tie!";
-                    gameWon = true;
-                    break;
                 case -3:
                     buttons[board * 9 + localTile].Text = "O";
                     for (int i = 0; i < 9; i++) //claim all tiles
@@ -228,7 +213,7 @@ namespace SuperTicTacToe
                     }
                     this.TextBox.Text = "AI Wins!";
                     gameWon = true;
-                    return;
+                    return board;
                 case 1: //local win
                     buttons[board * 9 + localTile].Text = "O";
                     for (int i = 0; i < 9; i++) //claim all tiles
@@ -260,65 +245,56 @@ namespace SuperTicTacToe
                     }
                 }
             }
+            return board;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void AIButtonClick(int board)
-        {
-            Random r = new Random();
-
-            ttt.ChooseBoardSecondPlayer(board);
-
-            int resultPlace, localTile;
-
-            do
+        public bool TieDetector(int board)
+		{
+            int ties = 0, p1 = 0, p2 = 0;
+            for (int i = 0; i < 9; i++)
             {
-                do
+                if (ttt.tiles[81 + i] == -2)
+                { //local tie
+                    ties++;
+                }
+                else if (ttt.tiles[81 + i] == 1)
+                { //p1
+                    p1++;
+                }
+                else if (ttt.tiles[81 + i] == -1)
                 {
-                    localTile = r.Next(0,9);
-                } while (buttons[board * 9 + localTile].Text == "X" || buttons[board * 9 + localTile].Text == "O");
-
-                resultPlace = ttt.PlaceSecondPlayer(localTile);
-            } while (resultPlace < 0);
-
-            switch (resultPlace)
-            {
-                case 0: //successful place
-                    buttons[board * 9 + localTile].Text = "O";
-                    int tempBoard = ttt.GetGameInfo().Item3;
-                    for (int i = 0; i < 9; i++)
-                    {
-                        if (i == tempBoard)
-                        {
-                            highlights[tempBoard].Visible = true;
-                            continue;
-                        }
-                        highlights[i].Visible = false;
-                    }
-                    break;
-                case 1: //local win
-                    for (int i = 0; i < 9; i++) //claim all tiles
-                    {
-                        buttons[board * 9 + i].Text = "O";
-                        buttons[board * 9 + i].BackColor = Color.OrangeRed;
-
-                        
-                    }
-                    int[] state = ttt.GetGameInfo().Item1;
-                    for (int i = 0; i < 9; i++) //highlight all boards as long as they're not claimed
-                    {
-                        if (state[81 + i] == 0)
-                        {
-                            highlights[i].Visible = true;
-                        }
-                    }
-                    break;
-                case 2: //global win
-                    // TODO FILL THIS IN LATER
-                    break;
+                    p2++;
+                }
             }
-
-            //this.TextBox.Text = ttt.GetGameInfo().Item3.ToString();
+            if (ties + p1 + p2 == 9)
+            { //all boards are either tied or won, and no one has won the game
+                this.gameWon = true;
+                
+                switch (ttt.tiles[81 + board]) //if game tie, need to still update the board
+                {
+                    case -2: //a tie
+                        for (int i = 0; i < 9; i++)
+                        {
+                            buttons[board * 9 + i].BackColor = Color.Gray;
+                        }
+                        break;
+                    case 1: //p1 win
+                        for (int i = 0; i < 9; i++)
+                        {
+                            buttons[board * 9 + i].BackColor = Color.Aquamarine;
+                        }
+                        break;
+                    case 2: //p2 win
+                        for (int i = 0; i < 9; i++)
+                        {
+                            buttons[board * 9 + i].BackColor = Color.OrangeRed;
+                        }
+                        break;
+                }
+                return true;
+            }
+            return false;
         }
 
         private void TLTL_Click(object sender, EventArgs e)

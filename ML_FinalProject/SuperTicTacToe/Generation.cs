@@ -62,28 +62,30 @@ namespace SuperTicTacToe
             this.generation_back1 = this.generation_back;
             this.generation_back = this.generation;
             this.generation++;
+            int[] rewards = new int[500];
+            (int, int) rewards_game;
             AI ai, ai1;
-            int reward, reward1;
 
             //now we evolve the current generation TODO
-            if (generation == 0)
-            { //if the current generation is the very first, make all AIs play 3 games against 5 other AIs
-                int[] games = new int[500]; //stores how many games each AI has played, all must be at least 5
+            //if (generation == 0)
+            //{ //if the current generation is the very first, make all AIs play 3 games against 5 other AIs
+            //    int[] games = new int[500]; //stores how many games each AI has played, all must be at least 5
 
-            }
-            else
-            { //make all AIs play the top 5 AIs 3 times (used to assess if the top 5 should remain the top 5)
-                for (int i = 0; i < 500; i++)
-                {
-                    ai = this.ais[i]; //grab the ith ai
-                    reward = 0;
-                    for (int j = 0; j < 5; j++)
-                    { //all top 5 ais
-                        ai1 = this.ais[j];
-                        (int, int) rewards = this.PlayGames(ai, ai1);
-                    }
+            //}
+            //else
+            //{ //make all AIs play the top 5 AIs 3 times (used to assess if the top 5 should remain the top 5)
+            for (int i = 0; i < 500; i++)
+            {
+                ai = this.ais[i]; //grab the ith ai
+                for (int j = 0; j < 5; j++)
+                { //all top 5 ais
+                    ai1 = this.ais[j];
+                    rewards_game = this.PlayGames(ai, ai1);
+                    rewards[i] += rewards_game.Item1; //add the reward from this game to the total of all 5 games
                 }
             }
+            //}
+            Array.Sort(rewards, ais); //sort the ais array based on the scores
 
             //kill off about half the generation
 
