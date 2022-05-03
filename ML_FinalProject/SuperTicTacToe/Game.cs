@@ -236,6 +236,9 @@ namespace SuperTicTacToe
                 if (this.focus_board == -1 || this.turns[this.focus_board] == 9 || this.tiles[81 + this.focus_board] != 0)
                 {
                     //Console.WriteLine($"DEBUGGING first in return -3: {this.focus_board == -1}");
+                    if (this.turns[this.focus_board] == 9 && this.tiles[81 + this.focus_board] == 0) { //if tie has occurred in this board
+                        this.tiles[81 + this.focus_board] = -2;
+                    }
                     return -3;
                 }
 
