@@ -86,13 +86,34 @@ namespace SuperTicTacToe
 
             int resultPlace = ttt.PlaceFirstPlayer(localTile);
 
-            if (resultPlace < 0) //if unsuccessful place
+            if (resultPlace == -1 || resultPlace == -2) //if unsuccessful place
             {
                 return;
             }
 
             switch (resultPlace)
 			{
+                case -4:
+                    buttons[globalTile].Text = "X";
+                    for (int i = 0; i < 81; i++)
+                    {
+                        buttons[i].BackColor = Color.Gray;
+                    }
+                    for (int i = 0; i < 9; i++)
+                    {
+                        highlights[i].Visible = false;
+                    }
+                    this.TextBox.Text = "Tie game!";
+                    gameWon = true;
+                    break;
+                case -3:
+                    buttons[globalTile].Text = "X";
+                    for (int i = 0; i < 9; i++)
+                    {
+                        buttons[board * 9 + i].BackColor = Color.Gray;
+                    }
+                    this.TextBox.Text = "Tie board for " + board;
+                    break;
                 case 0: //successful place
                     buttons[globalTile].Text = "X";
                     break;

@@ -211,6 +211,26 @@ namespace SuperTicTacToe
                 {
                     return -4;
                 }
+                int ties = 0, p1 = 0, p2 = 0;
+                for (int i = 0; i < 9; i++)
+                {
+                    if (this.turns[i] == 9)
+                    { //local tie
+                        ties++;
+                    }
+                    else if (this.tiles[81 + i] == 1)
+                    { //p1
+                        p1++;
+                    }
+                    else if (this.tiles[81 + i] == -1)
+                    {
+                        p2++;
+                    }
+                }
+                if (ties + p1 + p2 == 9)
+                { //all boards are either tied or won, and no one has won the game
+                    return -4;
+                }
 
                 // Tied or already won the newly focused board
                 if (this.focus_board == -1 || this.turns[this.focus_board] == 9 || this.tiles[81 + this.focus_board] != 0)
