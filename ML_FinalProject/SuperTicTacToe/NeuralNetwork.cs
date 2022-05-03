@@ -16,10 +16,10 @@ namespace SuperTicTacToe {
 
         }
 
-        public AI(NeuralNetwork place, NeuralNetwork board, int id) {
+        public AI(NeuralNetwork place, NeuralNetwork board) {
             this.place_nn = place;
             this.board_nn = board;
-            this.id = id;
+            //this.id = id;
         }
 
         //returns which tile of the 9 open options to go in

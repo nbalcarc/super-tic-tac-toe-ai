@@ -15,14 +15,17 @@ namespace SuperTicTacToe
     {
         private Button[] buttons;
         private PictureBox[] highlights;
+        private bool gameWon;
         
 
-        Game ttt = new Game(false);
+        Game ttt = new Game();
         AI ai = new AI();
 
         public Board()
         {
             InitializeComponent();
+
+            gameWon = false;
 
             buttons = new Button[81] { TLTL, TLTM, TLTR, TLML, TLMM, TLMR, TLBL, TLBM, TLBR, 
                 TMTL, TMTM, TMTR, TMML, TMMM, TMMR, TMBL, TMBM, TMBR, 
@@ -66,6 +69,13 @@ namespace SuperTicTacToe
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void UpdateText(int globalTile, bool player)
         {
+            if (gameWon)
+            {
+                return;
+            }
+
+            TextBox.Text = "Player 1: Click on any square!";
+
             int board = globalTile / 9, localTile = globalTile % 9;
             int resultBoard = ttt.ChooseBoardFirstPlayer(board);
 
@@ -87,15 +97,26 @@ namespace SuperTicTacToe
                     buttons[globalTile].Text = "X";
                     break;
                 case 1: //local win
+                    buttons[globalTile].Text = "X";
                     for (int i = 0; i < 9; i++)
                     {
-                        buttons[board * 9 + i].Text = "X";
                         buttons[board * 9 + i].BackColor = Color.Aquamarine;
                     }
+                    this.TextBox.Text = "Player 1 has claimed board " + board;
                     break;
                 case 2: //global win
-                    // TODO FILL THIS IN LATER
-                    break;
+                    buttons[globalTile].Text = "X";
+                    for (int i = 0; i < 81; i++)
+                    {
+                        buttons[i].BackColor = Color.Aquamarine;
+                    }
+                    for (int i = 0; i < 9; i++)
+                    {
+                        highlights[i].Visible = false;
+                    }
+                    this.TextBox.Text = "Player 1 Wins!";
+                    gameWon = true;
+                    return;
             }
 
             //AIButtonClick(localTile); //old ai based on random generation
@@ -144,11 +165,22 @@ namespace SuperTicTacToe
                     }
                     break;
                 case 2: //global win
-                        // TODO FILL THIS IN LATER, SIGNAL TO PROGRAM THAT GAME IS WON
+                    buttons[board * 9 + localTile].Text = "O";
+                    for (int i = 0; i < 81; i++) //claim all tiles
+                    {
+                        buttons[i].BackColor = Color.OrangeRed;
+                    }
+                    for (int i = 0; i < 9; i++)
+                    {
+                        highlights[i].Visible = false;
+                    }
+                    this.TextBox.Text = "AI Wins!";
+                    gameWon = true;
+                    return;
                 case 1: //local win
+                    buttons[board * 9 + localTile].Text = "O";
                     for (int i = 0; i < 9; i++) //claim all tiles
                     {
-                        buttons[board * 9 + i].Text = "O";
                         buttons[board * 9 + i].BackColor = Color.OrangeRed;
                     }
                     tempBoard = ttt.GetGameInfo().Item3;
@@ -161,6 +193,7 @@ namespace SuperTicTacToe
                         }
                         highlights[i].Visible = false;
                     }
+                    this.TextBox.Text = "AI has claimed board " + board;
                     break;
             }
 

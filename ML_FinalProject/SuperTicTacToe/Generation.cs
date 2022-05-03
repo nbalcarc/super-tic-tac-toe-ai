@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 
 namespace SuperTicTacToe {
 
@@ -53,7 +54,7 @@ namespace SuperTicTacToe {
             this.generation_back1 = this.generation_back;
             this.generation_back = this.generation;
             this.generation++;
-            Game game = new Game(true); //the actual game physics and such
+            Game game = new Game(); //the actual game physics and such
             AI ai, ai1;
             int reward, reward1;
 
@@ -80,7 +81,7 @@ namespace SuperTicTacToe {
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void AIMove(AI ai, int[] game)
+        public void AIMove(AI ai, Game game)
         {
             (int[], int[], int) state = game.GetGameInfo();
             if (state.Item3 == -1) { //first either choose a new board or pass the current one
@@ -104,14 +105,14 @@ namespace SuperTicTacToe {
                     break;
             }
 
-            state = game.GetGameInfo(); //update the new info
-            if (state.Item3 == -1) { //first either choose a new board or pass the current one
-                for (int i = 0; i < 9; i++) { //highlight all boards as long as they're not claimed
-                    if (state.Item1[81 + i] == 0) {
-                        highlights[i].Visible = true;
-                    }
-                }
-            }
+            //state = game.GetGameInfo(); //update the new info
+            //if (state.Item3 == -1) { //first either choose a new board or pass the current one
+            //    for (int i = 0; i < 9; i++) { //highlight all boards as long as they're not claimed
+            //        if (state.Item1[81 + i] == 0) {
+            //            highlights[i].Visible = true;
+            //        }
+            //    }
+            //}
         }
 
         //plays 3 games, and returns a score for each AI TODO
@@ -122,7 +123,7 @@ namespace SuperTicTacToe {
             int score = 0, score1 = 0;
             bool new_board = false;
             for (int i = 0; i < 3; i++) { //play 3 games
-                game = new Game(true);
+                game = new Game();
                 
 
                 //out of the game loop now, game has finished for one reason or another

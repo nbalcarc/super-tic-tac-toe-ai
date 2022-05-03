@@ -110,7 +110,7 @@ namespace SuperTicTacToe
         */
 
         // Constructor
-        public Game(bool randomPlayer)
+        public Game()
         {
             for (int i = 0; i < 160; i++)
             {
