@@ -705,11 +705,34 @@ namespace SuperTicTacToe
 
         private void button1_Click(object sender, EventArgs e)
         {
+            TextBox.Text = "Training... ";
+
             for (int i = 0; i < 10; i++)
             {
                 g.NextGeneration();
             }
+
+            this.ai = g.ais[0];
+
             TextBox.Text = "Current Generation: " + g.generation.ToString();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            foreach (Button b in buttons)
+            {
+                b.Text = "";
+                b.BackColor = Color.White;
+            }
+
+            for (int i = 0; i < 9; i++)
+            {
+                highlights[i].Visible = true;
+            }
+
+            gameWon = false;
+
+            ttt = new Game();
         }
     }
 }
