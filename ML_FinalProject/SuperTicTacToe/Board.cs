@@ -175,8 +175,6 @@ namespace SuperTicTacToe
                     }
                 }
             }
-            
-
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -10,14 +10,16 @@ namespace SuperTicTacToe {
     public class AI {
         private NeuralNetwork place_nn; //used to decide where to move
         private NeuralNetwork board_nn; //used to decide what board to place on (used occasionally)
+        public int id; //for databasing, should be unique
 
         public AI(): this(new NeuralNetwork(99, new int[]{162, 81, 9}, false), new NeuralNetwork(90, new int[]{36, 18, 9}, false)) {
 
         }
 
-        public AI(NeuralNetwork place, NeuralNetwork board) {
+        public AI(NeuralNetwork place, NeuralNetwork board, int id) {
             this.place_nn = place;
             this.board_nn = board;
+            this.id = id;
         }
 
         //returns which tile of the 9 open options to go in
