@@ -10,15 +10,15 @@ namespace SuperTicTacToe
     public class Game
     {
         // First 81 tiles represent the boards, next 9 represent board tiles, last 9 represent active board (for AI only)
-        private int[] tiles = new int[99];
+        public int[] tiles = new int[99];
         // An inverted board that stays updated like the first, meant for player2
-        private int[] tiles_inverted = new int[99];
+        public int[] tiles_inverted = new int[99];
         // 8 ways to win, two people, 10 boards (9 real + 1 overall)
-        private bool[] win_events = new bool[160];
+        public bool[] win_events = new bool[160];
         // If -1, this means the focus board hasn't been decided and is up to the player's choice, [-1, 8]
-        private int focus_board = -1;
+        public int focus_board = -1;
         // Counts how many turns have occurred in each board
-        private int[] turns = new int[10];
+        public int[] turns = new int[10];
         // Remembers whose turn it is
         //private bool turn;
 
@@ -238,6 +238,7 @@ namespace SuperTicTacToe
                     //Console.WriteLine($"DEBUGGING first in return -3: {this.focus_board == -1}");
                     if (this.turns[this.focus_board] == 9 && this.tiles[81 + this.focus_board] == 0) { //if tie has occurred in this board
                         this.tiles[81 + this.focus_board] = -2;
+                        this.tiles_inverted[81 + this.focus_board] = -2;
                     }
                     return -3;
                 }

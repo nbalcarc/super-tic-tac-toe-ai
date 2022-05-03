@@ -25,6 +25,15 @@ namespace SuperTicTacToe
         {
             InitializeComponent();
 
+            ttt.focus_board = 8;
+
+            for (int i= 0; i < 8; i++)
+            {
+                ttt.tiles[81 + i] = -2;
+                ttt.tiles_inverted[81 + i] = -2;
+
+            }
+
             gameWon = false;
 
             buttons = new Button[81] { TLTL, TLTM, TLTR, TLML, TLMM, TLMR, TLBL, TLBM, TLBR, 
@@ -152,7 +161,8 @@ namespace SuperTicTacToe
             {
                 Console.WriteLine($"DEBUGGING, choosing board");
                 ttt.ChooseBoardSecondPlayer(ai.ChooseBoard(state.Item2, false));
-            } else
+            } 
+            else
             {
                 Console.WriteLine($"DEBUGGING, reusing board");
                 ttt.ChooseBoardSecondPlayer(state.Item3);
@@ -174,15 +184,11 @@ namespace SuperTicTacToe
             {
                 case -4:
                     buttons[board * 9 + localTile].Text = "O";
-                    for (int i = 0; i < 81; i++) //claim all tiles
-                    {
-                        buttons[i].BackColor = Color.Gray;
-                    }
                     for (int i = 0; i < 9; i++)
                     {
                         highlights[i].Visible = false;
                     }
-                    this.TextBox.Text = "AI Wins!";
+                    this.TextBox.Text = "Game tie!";
                     gameWon = true;
                     break;
                 case -3:
