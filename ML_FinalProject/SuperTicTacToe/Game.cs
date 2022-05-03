@@ -50,7 +50,7 @@ namespace SuperTicTacToe
         public int PlaceFirstPlayer(int local_tile)
         {
             int ret = Place(local_tile, true);
-            if (ret > -1)
+            if (ret > -1 || ret == -3 || ret == -4)
 			{
                 UpdateFocusBoard(local_tile);
             }
@@ -61,7 +61,7 @@ namespace SuperTicTacToe
         public int PlaceSecondPlayer(int local_tile)
         {
             int ret = Place(local_tile, false);
-            if (ret > -1)
+            if (ret > -1 || ret == -3 || ret == -4)
             {
                 UpdateFocusBoard(local_tile);
             }

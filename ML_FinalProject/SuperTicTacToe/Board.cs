@@ -172,6 +172,31 @@ namespace SuperTicTacToe
             int tempBoard;
             switch (resultPlace)
             {
+                case -4:
+                    buttons[board * 9 + localTile].Text = "O";
+                    for (int i = 0; i < 81; i++) //claim all tiles
+                    {
+                        buttons[i].BackColor = Color.Gray;
+                    }
+                    for (int i = 0; i < 9; i++)
+                    {
+                        highlights[i].Visible = false;
+                    }
+                    this.TextBox.Text = "AI Wins!";
+                    gameWon = true;
+                    break;
+                case -3:
+                    buttons[board * 9 + localTile].Text = "O";
+                    for (int i = 0; i < 9; i++) //claim all tiles
+                    {
+                        buttons[board * 9 + i].BackColor = Color.Gray;
+                    }
+                    for (int i = 0; i < 9; i++)
+                    {
+                        highlights[i].Visible = false;
+                    }
+                    this.TextBox.Text = "Tie board " + board;
+                    break;
                 case 0: //successful place
                     buttons[board * 9 + localTile].Text = "O";
                     tempBoard = ttt.GetGameInfo().Item3;
