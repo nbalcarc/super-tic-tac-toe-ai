@@ -705,10 +705,11 @@ namespace SuperTicTacToe
 
         private void button1_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 10; i++)
             {
                 g.NextGeneration();
             }
+            TextBox.Text = "Current Generation: " + g.generation.ToString();
         }
     }
 }
