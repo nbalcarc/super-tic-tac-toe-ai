@@ -92,9 +92,9 @@ namespace SuperTicTacToe
 
             //kill off about half the generation, for now just kill the bottom half, and repopulate
             Random r = new Random();
-            for (int i = ai_num/2; i < ai_num; i++)
+            for (int i = ai_num / 2; i < ai_num; i++)
 			{
-                this.ais[i] = AI.Reproduce(this.ais[r.Next(0, ai_num/2)], this.ais[r.Next(0, ai_num)]);
+                this.ais[i] = AI.Reproduce(this.ais[r.Next(0, ai_num / 2)], this.ais[r.Next(0, ai_num / 2)]);
 			}
         }
 
