@@ -124,10 +124,12 @@ namespace SuperTicTacToe
                     break;
                 case 2: //global win
                     buttons[globalTile].Text = "X";
+                    /*
                     for (int i = 0; i < 81; i++)
                     {
                         buttons[i].BackColor = Color.Aquamarine;
                     }
+                    */
                     for (int i = 0; i < 9; i++)
                     {
                         highlights[i].Visible = false;
@@ -204,10 +206,12 @@ namespace SuperTicTacToe
                     break;
                 case 2: //global win
                     buttons[board * 9 + localTile].Text = "O";
+                    /*
                     for (int i = 0; i < 81; i++) //claim all tiles
                     {
                         buttons[i].BackColor = Color.OrangeRed;
                     }
+                    */
                     for (int i = 0; i < 9; i++)
                     {
                         highlights[i].Visible = false;
