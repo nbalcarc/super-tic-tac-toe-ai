@@ -1,83 +1,129 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Runtime.CompilerServices;
+﻿// <copyright file="Game.cs" company="Adam nassar &amp; Nathan Balcarcel">
+// Copyright (c) Adam nassar &amp; Nathan Balcarcel. All rights reserved.
+// </copyright>
 
 namespace SuperTicTacToe
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Runtime.CompilerServices;
+    using System.Text;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// Game engine.
+    /// </summary>
     public class Game
     {
         // First 81 tiles represent the boards, next 9 represent board tiles, last 9 represent active board (for AI only)
-        public int[] tiles = new int[99];
-        // An inverted board that stays updated like the first, meant for player2
-        public int[] tiles_inverted = new int[99];
-        // 8 ways to win, two people, 10 boards (9 real + 1 overall)
-        public bool[] win_events = new bool[160];
-        // If -1, this means the focus board hasn't been decided and is up to the player's choice, [-1, 8]
-        public int focus_board = -1;
-        // Counts how many turns have occurred in each board
-        public int[] turns = new int[10];
-        // Remembers whose turn it is
-        //private bool turn;
+        private int[] tiles = new int[99];
 
+        // An inverted board that stays updated like the first, meant for player2
+        private int[] tilesInverted = new int[99];
+
+        // 8 ways to win, two people, 10 boards (9 real + 1 overall)
+        private bool[] winEvents = new bool[160];
+
+        // If -1, this means the focus board hasn't been decided and is up to the player's choice, [-1, 8]
+        private int focusBoard = -1;
+
+        // Counts how many turns have occurred in each board
+        private int[] turns = new int[10];
+
+        /// <summary>
+        /// Gets tiles.
+        /// </summary>
+        public int[] Tiles
+        {
+            get
+            {
+                return this.tiles;
+            }
+        }
 
         ////////////////////////////////
         /////////  INTERFACE  //////////
         ////////////////////////////////
 
-        //returns the current game state, including the global board tiles, current focus board, and player turn
+        /// <summary>
+        /// Returns the current game state, including the global board tiles, current focus board, and player turn.
+        /// </summary>
+        /// <returns>Game info.</returns>
         public (int[], int[], int) GetGameInfo()
         {
-            //Note: this whole if statement is solely for neural networks
+            // Note: this whole if statement is solely for neural networks
             // If a board is focused
-            if (this.focus_board > -1)
+            if (this.focusBoard > -1)
             {
                 // Clear out focused board
                 for (int i = 90; i < 99; i++)
                 {
                     this.tiles[i] = 0;
-                    this.tiles_inverted[i] = 0;
+                    this.tilesInverted[i] = 0;
                 }
-                this.tiles[90 + this.focus_board] = 1; //set the focus board
-                this.tiles[90 + this.focus_board] = 1;
+
+                // Set the focus board
+                this.tiles[90 + this.focusBoard] = 1;
+                this.tiles[90 + this.focusBoard] = 1;
             }
-            return (this.tiles, this.tiles_inverted, this.focus_board);
+
+            return (this.tiles, this.tilesInverted, this.focusBoard);
         }
 
-        // Refer to Place
+        /// <summary>
+        /// Places first player.
+        /// </summary>
+        /// <param name="local_tile">local_tile.</param>
+        /// <returns>A success value.</returns>
         public int PlaceFirstPlayer(int local_tile)
         {
-            int ret = Place(local_tile, true);
-            if (ret > -1 || ret == -3 || ret == -4) //if a successful place has occurred, update the board
-			{
-                UpdateFocusBoard(local_tile);
-            }
-            return ret;
-        }
+            int ret = this.Place(local_tile, true);
 
-        // Refer to Place
-        public int PlaceSecondPlayer(int local_tile)
-        {
-            int ret = Place(local_tile, false);
+            // If a successful place has occurred, update the board
             if (ret > -1 || ret == -3 || ret == -4)
             {
-                UpdateFocusBoard(local_tile);
+                this.UpdateFocusBoard(local_tile);
             }
+
             return ret;
         }
 
-        // Refer to ChooseBoard
-        public int ChooseBoardFirstPlayer(int board)
+        /// <summary>
+        /// Places second player.
+        /// </summary>
+        /// <param name="local_tile">local_tile</param>
+        /// <returns>A success value.</returns>
+        public int PlaceSecondPlayer(int local_tile)
         {
-            return ChooseBoard(board, true);
+            int ret = this.Place(local_tile, false);
+
+            if (ret > -1 || ret == -3 || ret == -4)
+            {
+                this.UpdateFocusBoard(local_tile);
+            }
+
+            return ret;
         }
 
-        // Refer to ChooseBoard
+        /// <summary>
+        /// Chooses board for first player.
+        /// </summary>
+        /// <param name="board">board.</param>
+        /// <returns>If chosen board valid.</returns>
+        public int ChooseBoardFirstPlayer(int board)
+        {
+            return this.ChooseBoard(board, true);
+        }
+
+        /// <summary>
+        /// Chooses board for second player.
+        /// </summary>
+        /// <param name="board">board.</param>
+        /// <returns>If chosen board valid.</returns>
         public int ChooseBoardSecondPlayer(int board)
         {
-            return ChooseBoard(board, false);
+            return this.ChooseBoard(board, false);
         }
 
         ////////////////////////////////
@@ -96,7 +142,7 @@ namespace SuperTicTacToe
         6 - diagonal with negative slope
         7 - diagonal with positive slope
 
-        Sections of win_events:
+        Sections of winEvents:
         0 - Player1 first board
         8 - Player1 second board
         ...
@@ -109,12 +155,14 @@ namespace SuperTicTacToe
         160 - OUT OF BOUNDS
         */
 
-        // Constructor
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Game"/> class.
+        /// </summary>
         public Game()
         {
             for (int i = 0; i < 160; i++)
             {
-                this.win_events[i] = true;
+                this.winEvents[i] = true;
             }
 
             /*
@@ -130,38 +178,43 @@ namespace SuperTicTacToe
             */
         }
 
-        // Simple way to update both boards at the same time
+        /// <summary>
+        /// Simple way to update both boards at the same time.
+        /// </summary>
+        /// <param name="global_tile">global_tile.</param>
+        /// <param name="player">player.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void UpdateTile(int global_tile, bool player)
         {
             if (player)
             {
                 this.tiles[global_tile] = 1;
-                this.tiles_inverted[global_tile] = -1;
+                this.tilesInverted[global_tile] = -1;
             }
             else
             {
                 this.tiles[global_tile] = -1;
-                this.tiles_inverted[global_tile] = 1;
+                this.tilesInverted[global_tile] = 1;
             }
         }
 
-        // If player is choosing the next board, update it here, returns -2: wrong player, -1: invalid board, 0: no issues
+        /// <summary>
+        /// If player is choosing the next board, update it here, returns -2: wrong player, -1: invalid board, 0: no issues.
+        /// </summary>
+        /// <param name="board">board.</param>
+        /// <param name="player">player.</param>
+        /// <returns>If board is valid..</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int ChooseBoard(int board, bool player)
         {
-            //if (player != this.turn)
-            //{
-            //    return -2;
-            //}
             // Player is allowed to choose the board and that board has not been won
-            if (this.focus_board == -1 && this.tiles[81 + board] == 0)
+            if (this.focusBoard == -1 && this.tiles[81 + board] == 0)
             {
-                this.focus_board = board;
+                this.focusBoard = board;
                 return 0;
             }
 
-            if (this.focus_board == board)
+            if (this.focusBoard == board)
             {
                 return 0;
             }
@@ -169,57 +222,47 @@ namespace SuperTicTacToe
             return -1;
         }
 
-        //-5: -4 and -3, -4: game tied, -3: board tied, -2: wrong player, -1: failed to place, 0: placed correctly, 1: local win, 2: game win
+        /// <summary>
+        /// -5: -4 and -3, -4: game tied, -3: board tied, -2: wrong player, -1: failed to place, 0: placed correctly, 1: local win, 2: game win.
+        /// </summary>
+        /// <param name="local_tile">local_tile.</param>
+        /// <param name="player">player.</param>
+        /// <returns>If place was successful.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int Place(int local_tile, bool player)
         {
-            //if (player != this.turn)
-            //{
-            //    return -2;
-            //}
-
             // Checks if we can place at this location
-            if (this.tiles[81 + this.focus_board] == 0 && this.tiles[local_tile + 9 * this.focus_board] == 0)
+            if (this.tiles[this.focusBoard + 81] == 0 && this.tiles[local_tile + (this.focusBoard * 9)] == 0)
             {
                 // Updates the tile
-                UpdateTile(local_tile + 9 * this.focus_board, player);
+                this.UpdateTile(local_tile + (this.focusBoard* 9), player);
 
                 // Increments turn number for specific board
-                this.turns[this.focus_board] += 1;
+                this.turns[this.focusBoard] += 1;
 
                 // Increment global turns
                 this.turns[9] += 1;
 
-                // Flip whoever's turn it is
-                //this.turn = !this.turn;
-
                 // Checks for win
-                int ret = PlaceResult(local_tile, player);
-
-                //int current_focus_board = this.focus_board;
-                //UpdateFocusBoard(local_tile);
+                int ret = this.PlaceResult(local_tile, player);
 
                 // If any win detected, return
                 if (ret > 0)
                 {
-                    //this.focus_board = -1; //if a win has taken place, let the other player choose their board
+                    // this.focusBoard = -1; //if a win has taken place, let the other player choose their board
                     return ret;
                 }
 
-                // Tied the game
-                //if (this.turns[9] == 81)
-                //{
-                //    return -4;
-                //}
-
                 // Tied or already won the newly focused board
-                if (this.focus_board == -1 || this.turns[this.focus_board] == 9 || this.tiles[81 + this.focus_board] != 0)
+                if (this.focusBoard == -1 || this.turns[this.focusBoard] == 9 || this.tiles[81 + this.focusBoard] != 0)
                 {
-                    //Console.WriteLine($"DEBUGGING first in return -3: {this.focus_board == -1}");
-                    if (this.turns[this.focus_board] == 9 && this.tiles[81 + this.focus_board] == 0) { //if tie has occurred in this board
-                        this.tiles[81 + this.focus_board] = -2;
-                        this.tiles_inverted[81 + this.focus_board] = -2;
+                    // If tie has occurred in this board
+                    if (this.turns[this.focusBoard] == 9 && this.tiles[81 + this.focusBoard] == 0)
+                    {
+                        this.tiles[81 + this.focusBoard] = -2;
+                        this.tilesInverted[81 + this.focusBoard] = -2;
                     }
+
                     return -3;
                 }
 
@@ -227,44 +270,52 @@ namespace SuperTicTacToe
             }
 
             // Blocked place location
-            if (this.focus_board == -1 || this.turns[this.focus_board] == 9 || this.tiles[81 + this.focus_board] != 0)
-            { 
+            if (this.focusBoard == -1 || this.turns[this.focusBoard] == 9 || this.tiles[81 + this.focusBoard] != 0)
+            {
                 return -3;
             }
 
             return -1;
         }
 
-        //update the focus_board
+        /// <summary>
+        /// Updates the focus board.
+        /// </summary>
+        /// <param name="board">board.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void UpdateFocusBoard(int board)
         {
             // Checks if board has been won
             if (this.tiles[81 + board] == 0 && this.turns[board] < 9)
             {
-                this.focus_board = board;
+                this.focusBoard = board;
                 return;
             }
 
             // Board has been won, player will choose next location
-            this.focus_board = -1;
+            this.focusBoard = -1;
         }
 
-        // Will update win_events according to the last move, 0: no win, 1: local win, 2: game win
+        /// <summary>
+        /// Will update winEvents according to the last move, 0: no win, 1: local win, 2: game win.
+        /// </summary>
+        /// <param name="local_tile">local_tile.</param>
+        /// <param name="player">player.</param>
+        /// <returns>The success value.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int PlaceResult(int local_tile, bool player)
         {
             // Check for local win
-            int ret = CheckWin(this.focus_board, player);
+            int ret = this.CheckWin(this.focusBoard, player);
 
             // If a local win has taken place
             if (ret == 1)
             {
                 // Update global board to reflect this victory
-                UpdateTile(81 + this.focus_board, player);
+                this.UpdateTile(81 + this.focusBoard, player);
 
                 // Check for a victory in the main board
-                ret += CheckWin(9, player);
+                ret += this.CheckWin(9, player);
 
                 // If victory in main board, return early
                 if (ret == 2)
@@ -273,18 +324,23 @@ namespace SuperTicTacToe
                 }
 
                 // Update the global board win conditions for the opponent
-                UpdateWinConditions((player ? 152 : 72), this.focus_board);
+                this.UpdateWinConditions(player ? 152 : 72, this.focusBoard);
 
                 return ret;
             }
 
             // Cancel out the enemy's win conditions
-            UpdateWinConditions((player ? 80 : 0) + this.focus_board * 8, local_tile);
+            this.UpdateWinConditions((player ? 80 : 0) + (this.focusBoard * 8), local_tile);
 
             return ret;
         }
 
-        // Checks board for win, 1 is win, 0 is no win
+        /// <summary>
+        /// Checks board for win, 1 is win, 0 is no win.
+        /// </summary>
+        /// <param name="board">board.</param>
+        /// <param name="player">player.</param>
+        /// <returns>If win.</returns>
         public int CheckWin(int board, bool player)
         {
             int player_const = player ? 1 : -1;
@@ -300,7 +356,7 @@ namespace SuperTicTacToe
             for (int condition = 0; condition < 8; condition++)
             {
                 // This win condition is not possible
-                if (!this.win_events[offset_conditions + condition])
+                if (!this.winEvents[offset_conditions + condition])
                 {
                     continue;
                 }
@@ -313,100 +369,113 @@ namespace SuperTicTacToe
                         {
                             ret = 1;
                         }
+
                         break;
                     case 1: // Row across middle
                         if (this.tiles[offset + 3] == player_const && this.tiles[offset + 4] == player_const && this.tiles[offset + 5] == player_const)
                         {
                             ret = 1;
                         }
+
                         break;
                     case 2: // Row across bottom
                         if (this.tiles[offset + 6] == player_const && this.tiles[offset + 7] == player_const && this.tiles[offset + 8] == player_const)
                         {
                             ret = 1;
                         }
+
                         break;
                     case 3: // Column on left
                         if (this.tiles[offset] == player_const && this.tiles[offset + 3] == player_const && this.tiles[offset + 6] == player_const)
                         {
                             ret = 1;
                         }
+
                         break;
                     case 4: // Column in middle
                         if (this.tiles[offset + 1] == player_const && this.tiles[offset + 4] == player_const && this.tiles[offset + 7] == player_const)
                         {
                             ret = 1;
                         }
+
                         break;
                     case 5: // Column on right
                         if (this.tiles[offset + 2] == player_const && this.tiles[offset + 5] == player_const && this.tiles[offset + 8] == player_const)
                         {
                             ret = 1;
                         }
+
                         break;
                     case 6: // Diagonal with negative slope
                         if (this.tiles[offset] == player_const && this.tiles[offset + 4] == player_const && this.tiles[offset + 8] == player_const)
                         {
                             ret = 1;
                         }
+
                         break;
                     case 7: // Diagonal with positive slope
                         if (this.tiles[offset + 2] == player_const && this.tiles[offset + 4] == player_const && this.tiles[offset + 6] == player_const)
                         {
                             ret = 1;
                         }
+
                         break;
                 }
             }
+
             return ret;
         }
 
-        // Cancels out the opponent's win conditions for this given move
+        /// <summary>
+        /// Cancels out the opponent's win conditions for this given move.
+        /// </summary>
+        /// <param name="offset">offset.</param>
+        /// <param name="local_tile">local_tile.</param>
         public void UpdateWinConditions(int offset, int local_tile)
         {
             switch (local_tile)
             {
                 case 0: // Top left
-                    this.win_events[offset] = false; // Top row
-                    this.win_events[offset + 3] = false; // Left column
-                    this.win_events[offset + 6] = false;
+                    this.winEvents[offset] = false; // Top row
+                    this.winEvents[offset + 3] = false; // Left column
+                    this.winEvents[offset + 6] = false;
                     break;
                 case 1: // Top mid
-                    this.win_events[offset] = false;
-                    this.win_events[offset + 4] = false;
+                    this.winEvents[offset] = false;
+                    this.winEvents[offset + 4] = false;
                     break;
                 case 2: // Top right
-                    this.win_events[offset] = false;
-                    this.win_events[offset + 5] = false;
-                    this.win_events[offset + 7] = false;
+                    this.winEvents[offset] = false;
+                    this.winEvents[offset + 5] = false;
+                    this.winEvents[offset + 7] = false;
                     break;
                 case 3: // Mid left
-                    this.win_events[offset + 1] = false;
-                    this.win_events[offset + 3] = false;
+                    this.winEvents[offset + 1] = false;
+                    this.winEvents[offset + 3] = false;
                     break;
                 case 4: // Mid mid
-                    this.win_events[offset + 1] = false;
-                    this.win_events[offset + 4] = false;
-                    this.win_events[offset + 6] = false;
-                    this.win_events[offset + 7] = false;
+                    this.winEvents[offset + 1] = false;
+                    this.winEvents[offset + 4] = false;
+                    this.winEvents[offset + 6] = false;
+                    this.winEvents[offset + 7] = false;
                     break;
                 case 5: // Mid right
-                    this.win_events[offset + 1] = false;
-                    this.win_events[offset + 5] = false;
+                    this.winEvents[offset + 1] = false;
+                    this.winEvents[offset + 5] = false;
                     break;
                 case 6: // Bottom left
-                    this.win_events[offset + 2] = false;
-                    this.win_events[offset + 3] = false;
-                    this.win_events[offset + 7] = false;
+                    this.winEvents[offset + 2] = false;
+                    this.winEvents[offset + 3] = false;
+                    this.winEvents[offset + 7] = false;
                     break;
                 case 7: // Bottom mid
-                    this.win_events[offset + 2] = false;
-                    this.win_events[offset + 4] = false;
+                    this.winEvents[offset + 2] = false;
+                    this.winEvents[offset + 4] = false;
                     break;
                 case 8: // Bottom right
-                    this.win_events[offset + 2] = false;
-                    this.win_events[offset + 5] = false;
-                    this.win_events[offset + 6] = false;
+                    this.winEvents[offset + 2] = false;
+                    this.winEvents[offset + 5] = false;
+                    this.winEvents[offset + 6] = false;
                     break;
             }
         }
