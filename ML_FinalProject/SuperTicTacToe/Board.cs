@@ -39,27 +39,29 @@ namespace SuperTicTacToe
             // ttt.focus_board = 8;
             // for (int i= 0; i < 8; i++)
             // {
-            //     ttt.tiles[81 + i] = -2;
-            //     ttt.tiles_inverted[81 + i] = -2
+            //     ttt.Tiles[81 + i] = -2;
+            //     ttt.Tiles_inverted[81 + i] = -2
             // }
             this.gameWon = false;
 
-            this.buttons = new Button[81] { this.TLTL, this.TLTM, this.TLTR, this.TLML, this.TLMM, this.TLMR, this.TLBL, this.TLBM, this.TLBR,
+            this.buttons = new Button[81]
+            {
+                this.TLTL, this.TLTM, this.TLTR, this.TLML, this.TLMM, this.TLMR, this.TLBL, this.TLBM, this.TLBR,
                 this.TMTL, this.TMTM, this.TMTR, this.TMML, this.TMMM, this.TMMR, this.TMBL, this.TMBM, this.TMBR,
                 this.TRTL, this.TRTM, this.TRTR, this.TRML, this.TRMM, this.TRMR, this.TRBL, this.TRBM, this.TRBR,
                 this.MLTL, this.MLTM, this.MLTR, this.MLML, this.MLMM, this.MLMR, this.MLBL, this.MLBM, this.MLBR,
                 this.MMTL, this.MMTM, this.MMTR, this.MMML, this.MMMM, this.MMMR, this.MMBL, this.MMBM, this.MMBR,
-                this.MRTL, this.MRTM, this.MRTR, this.MRML, this.MRMM, this.MRMR, this.MRBL, this.MRBM,this.MRBR,
+                this.MRTL, this.MRTM, this.MRTR, this.MRML, this.MRMM, this.MRMR, this.MRBL, this.MRBM, this.MRBR,
                 this.BLTL, this.BLTM, this.BLTR, this.BLML, this.BLMM, this.BLMR, this.BLBL, this.BLBM, this.BLBR,
                 this.BMTL, this.BMTM, this.BMTR, this.BMML, this.BMMM, this.BMMR, this.BMBL, this.BMBM, this.BMBR,
-                this.BRTL, this.BRTM, this.BRTR, this.BRML, this.BRMM, this.BRMR, this.BRBL, this.BRBM, this.BRBR, };
+                this.BRTL, this.BRTM, this.BRTR, this.BRML, this.BRMM, this.BRMR, this.BRBL, this.BRBM, this.BRBR,
+            };
 
-            this.highlights = new PictureBox[9] {this.TL, this.TM, this.TR, this.ML, this.MM, this.MR, this.BL, this.BM, this.BR};
+            this.highlights = new PictureBox[9] { this.TL, this.TM, this.TR, this.ML, this.MM, this.MR, this.BL, this.BM, this.BR };
         }
 
         private void Board_Load(object sender, EventArgs e)
         {
-
             for (int i = 0; i < this.buttons.Length; i++)
             {
                 this.UpdateFont(this.buttons[i]);
@@ -165,7 +167,7 @@ namespace SuperTicTacToe
             }
 
             // New ai based on neural network (no learning yet, just random weights)
-            board = this.SmartAIButtonClick(); 
+            board = this.SmartAIButtonClick();
 
             this.TieDetector(board);
         }
@@ -183,7 +185,7 @@ namespace SuperTicTacToe
             if (state.Item3 == -1)
             {
                 Console.WriteLine($"DEBUGGING, choosing board");
-                this.ttt.ChooseBoardSecondPlayer(ai.ChooseBoard(state.Item2, false));
+                this.ttt.ChooseBoardSecondPlayer(this.ai.ChooseBoard(state.Item2, false));
             }
             else
             {
@@ -212,8 +214,8 @@ namespace SuperTicTacToe
                 case -3:
                     this.buttons[(board * 9) + localTile].Text = "O";
 
-                    // Claim all tiles
-                    for (int i = 0; i < 9; i++) 
+                    // Claim all Tiles
+                    for (int i = 0; i < 9; i++)
                     {
                         this.buttons[(board * 9) + i].BackColor = Color.Gray;
                     }
@@ -260,8 +262,8 @@ namespace SuperTicTacToe
                     // Local win
                     this.buttons[(board * 9) + localTile].Text = "O";
 
-                    // Claim all tiles
-                    for (int i = 0; i < 9; i++) 
+                    // Claim all Tiles
+                    for (int i = 0; i < 9; i++)
                     {
                         this.buttons[(board * 9) + i].BackColor = Color.OrangeRed;
                     }
@@ -291,7 +293,7 @@ namespace SuperTicTacToe
             if (state.Item3 == -1)
             {
                 // Highlight all boards as long as they're not claimed
-                for (int i = 0; i < 9; i++) 
+                for (int i = 0; i < 9; i++)
                 {
                     if (state.Item1[81 + i] == 0)
                     {
@@ -315,17 +317,17 @@ namespace SuperTicTacToe
             for (int i = 0; i < 9; i++)
             {
                 // Local tie
-                if (this.ttt.tiles[i + 81] == -2)
+                if (this.ttt.Tiles[i + 81] == -2)
                 {
                     ties++;
                 }
 
                 // p1
-                else if (this.ttt.tiles[i + 81] == 1)
+                else if (this.ttt.Tiles[i + 81] == 1)
                 {
                     p1++;
                 }
-                else if (this.ttt.tiles[i + 81] == -1)
+                else if (this.ttt.Tiles[i + 81] == -1)
                 {
                     p2++;
                 }
@@ -337,7 +339,7 @@ namespace SuperTicTacToe
                 this.gameWon = true;
 
                 // If game tie, need to still update the board
-                switch (this.ttt.tiles[81 + board])
+                switch (this.ttt.Tiles[81 + board])
                 {
                     case -2:
                         // A tie
@@ -395,12 +397,12 @@ namespace SuperTicTacToe
 
             for (int i = 0; i < 10; i++)
             {
-                g.NextGeneration();
+                this.g.NextGeneration();
             }
 
-            this.ai = g.ais[0];
+            this.ai = this.g.AIS[0];
 
-            this.TextBox.Text = "Current Generation: " + g.generation.ToString();
+            this.TextBox.Text = "Current Generation: " + this.g.GetGeneration.ToString();
         }
 
         private void TLTL_Click(object sender, EventArgs e)

@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AI.cs" />
     <Compile Include="Board.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -57,6 +58,7 @@
       <DependentUpon>Board.cs</DependentUpon>
     </Compile>
     <Compile Include="Game.cs" />
+    <Compile Include="Gaussian.cs" />
     <Compile Include="Generation.cs" />
     <Compile Include="NeuralNetwork.cs" />
     <Compile Include="Program.cs" />

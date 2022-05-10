@@ -13,16 +13,20 @@ namespace SuperTicTacToe
     public class Generation
     {
         // Stores all the ais in this generation
-        public AI[] ais;
+        private AI[] ais;
 
         // Backups of the ais (should be ordered)
-        public AI[] ais_back, ais_back1, ais_back2;
+        private AI[] aisBack;
+        private AI[] aisBack1;
+        private AI[] aisBack2;
 
         // The current generation number
-        public int generation;
+        private int generation;
 
         // Backups of the generation numbers
-        public int generation_back, generation_back1, generation_back2;
+        private int generationBack;
+        private int generationBack1;
+        private int generationBack2;
 
         // "Returns a random floating-point number that is greater than or equal to 0.0, and less than 1.0."
         private Random random = new Random();
@@ -31,15 +35,14 @@ namespace SuperTicTacToe
         private int[] scores;
 
         // Number of ais per generation
-        public int aiNum;
+        private int aiNum;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Generation"/> class.
         /// </summary>
-        public Generation() 
+        public Generation()
             : this(new AI[50], -1, new AI[0], new AI[0], new AI[0], 50)
         {
-
         }
 
         /// <summary>
@@ -47,22 +50,22 @@ namespace SuperTicTacToe
         /// </summary>
         /// <param name="ais">ais.</param>
         /// <param name="generation">generation.</param>
-        /// <param name="ais_back">ais_back.</param>
-        /// <param name="ais_back1">ais_back1.</param>
-        /// <param name="ais_back2">ais_back2.</param>
-        /// <param name="aiNum">aiNum</param>
-        public Generation(AI[] ais, int generation, AI[] ais_back, AI[] ais_back1, AI[] ais_back2, int aiNum)
+        /// <param name="aisBack">aisBack.</param>
+        /// <param name="aisBack1">aisBack1.</param>
+        /// <param name="aisBack2">aisBack2.</param>
+        /// <param name="aiNum">aiNum.</param>
+        public Generation(AI[] ais, int generation, AI[] aisBack, AI[] aisBack1, AI[] aisBack2, int aiNum)
         {
             this.aiNum = aiNum;
             this.generation = generation;
             this.ais = ais;
 
-            this.generation_back = generation - 1;
-            this.generation_back1 = generation - 2;
-            this.generation_back2 = generation - 3;
-            this.ais_back = ais_back;
-            this.ais_back1 = ais_back1;
-            this.ais_back2 = ais_back2;
+            this.generationBack = generation - 1;
+            this.generationBack1 = generation - 2;
+            this.generationBack2 = generation - 3;
+            this.aisBack = aisBack;
+            this.aisBack1 = aisBack1;
+            this.aisBack2 = aisBack2;
             this.scores = new int[aiNum];
 
             // If first generation, generate new AIs to fill in the array
@@ -79,13 +82,101 @@ namespace SuperTicTacToe
         }
 
         /// <summary>
+        /// Gets ais.
+        /// </summary>
+        public AI[] AIS
+        {
+            get
+            {
+                return this.ais;
+            }
+        }
+
+        /// <summary>
+        /// Gets aisBack.
+        /// </summary>
+        public AI[] AISBACK
+        {
+            get
+            {
+                return this.aisBack;
+            }
+        }
+
+        /// <summary>
+        /// Gets aisBack1.
+        /// </summary>
+        public AI[] AISBACK1
+        {
+            get
+            {
+                return this.aisBack1;
+            }
+        }
+
+        /// <summary>
+        /// Gets aisBack2.
+        /// </summary>
+        public AI[] AISBACK2
+        {
+            get
+            {
+                return this.aisBack2;
+            }
+        }
+
+        /// <summary>
+        /// Gets generation.
+        /// </summary>
+        public int GetGeneration
+        {
+            get
+            {
+                return this.generation;
+            }
+        }
+
+        /// <summary>
+        /// Gets generationBack.
+        /// </summary>
+        public int GenerationBack
+        {
+            get
+            {
+                return this.generationBack;
+            }
+        }
+
+        /// <summary>
+        /// Gets generationBack1.
+        /// </summary>
+        public int GenerationBack1
+        {
+            get
+            {
+                return this.generationBack1;
+            }
+        }
+
+        /// <summary>
+        /// Gets generationBack2.
+        /// </summary>
+        public int GenerationBack2
+        {
+            get
+            {
+                return this.generationBack2;
+            }
+        }
+
+        /// <summary>
         /// Evolve in a loop, checking if a stop condition has been met or not after every new generation TODO.
         /// </summary>
         /// <returns>generation.</returns>
         public int Evolve()
         {
             // Used to track how many generations we've gone through
-            int generation = this.generation; 
+            int generation = this.generation;
 
             return generation;
         }
@@ -96,16 +187,16 @@ namespace SuperTicTacToe
         public void NextGeneration()
         {
             // First backup the current generations and throw out the 4th
-            this.ais_back2 = this.ais_back1;
-            this.ais_back1 = this.ais_back;
-            this.ais_back = this.ais;
+            this.aisBack2 = this.aisBack1;
+            this.aisBack1 = this.aisBack;
+            this.aisBack = this.ais;
 
             // This may cause weird bugs, look into this later if any issues pop up
-            this.ais = (AI[])this.ais.Clone(); 
+            this.ais = (AI[])this.ais.Clone();
 
-            this.generation_back2 = this.generation_back1;
-            this.generation_back1 = this.generation_back;
-            this.generation_back = this.generation;
+            this.generationBack2 = this.generationBack1;
+            this.generationBack1 = this.generationBack;
+            this.generationBack = this.generation;
             this.generation++;
             int[] rewards = new int[this.aiNum];
             (int, int) rewards_game;
@@ -128,13 +219,14 @@ namespace SuperTicTacToe
                 {
                     ai1 = this.ais[j];
                     rewards_game = this.PlayGames(ai, ai1);
+
                     // Add the reward from this game to the total of all 5 games
                     rewards[i] += rewards_game.Item1;
                 }
             }
 
             // Sort the ais array based on the scores
-            Array.Sort(rewards, ais); 
+            Array.Sort(rewards, this.ais);
 
             // Kill off about half the generation, for now just kill the bottom half, and repopulate
             Random r = new Random();
@@ -207,7 +299,7 @@ namespace SuperTicTacToe
         /// <param name="game">game.</param>
         /// <returns>boolean.</returns>
         public bool TieDetector(Game game)
-		{
+        {
             int ties = 0, p1 = 0, p2 = 0;
             for (int i = 0; i < 9; i++)
             {
@@ -233,7 +325,6 @@ namespace SuperTicTacToe
             }
 
             return false;
-
         }
 
         /// <summary>
@@ -261,7 +352,7 @@ namespace SuperTicTacToe
             int resultPlace, localTile;
 
             // Update the new info
-            state = game.GetGameInfo(); 
+            state = game.GetGameInfo();
             localTile = ai.NextMove(state.Item2, state.Item3);
             resultPlace = game.PlaceSecondPlayer(localTile);
 

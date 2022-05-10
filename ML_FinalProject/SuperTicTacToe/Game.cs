@@ -32,6 +32,17 @@ namespace SuperTicTacToe
         private int[] turns = new int[10];
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Game"/> class.
+        /// </summary>
+        public Game()
+        {
+            for (int i = 0; i < 160; i++)
+            {
+                this.winEvents[i] = true;
+            }
+        }
+
+        /// <summary>
         /// Gets tiles.
         /// </summary>
         public int[] Tiles
@@ -92,7 +103,7 @@ namespace SuperTicTacToe
         /// <summary>
         /// Places second player.
         /// </summary>
-        /// <param name="local_tile">local_tile</param>
+        /// <param name="local_tile">local_tile.</param>
         /// <returns>A success value.</returns>
         public int PlaceSecondPlayer(int local_tile)
         {
@@ -130,7 +141,6 @@ namespace SuperTicTacToe
         ////////////  END  /////////////
         ////////////////////////////////
 
-
         /*
         Win conditions:
         0 - row across top
@@ -154,29 +164,6 @@ namespace SuperTicTacToe
         152 - Player2 total board
         160 - OUT OF BOUNDS
         */
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Game"/> class.
-        /// </summary>
-        public Game()
-        {
-            for (int i = 0; i < 160; i++)
-            {
-                this.winEvents[i] = true;
-            }
-
-            /*
-            if (randomPlayer)
-            {
-                Random random = new Random();
-                this.turn = random.Next(2) == 1; //choose first turn randomly
-            }
-            else
-            {
-                this.turn = true;
-            }
-            */
-        }
 
         /// <summary>
         /// Simple way to update both boards at the same time.
@@ -235,7 +222,7 @@ namespace SuperTicTacToe
             if (this.tiles[this.focusBoard + 81] == 0 && this.tiles[local_tile + (this.focusBoard * 9)] == 0)
             {
                 // Updates the tile
-                this.UpdateTile(local_tile + (this.focusBoard* 9), player);
+                this.UpdateTile(local_tile + (this.focusBoard * 9), player);
 
                 // Increments turn number for specific board
                 this.turns[this.focusBoard] += 1;
@@ -350,7 +337,7 @@ namespace SuperTicTacToe
             int offset = board * 9;
 
             // Offset within the win conditions, saved to int because used multiple times during loop
-            int offset_conditions = board * 8 + (player ? 0 : 80);
+            int offset_conditions = (board * 8) + (player ? 0 : 80);
 
             // For all eight conditions
             for (int condition = 0; condition < 8; condition++)
