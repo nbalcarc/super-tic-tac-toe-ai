@@ -72,7 +72,7 @@ namespace SuperTicTacToe
                 this.highlights[i].Visible = true;
             }
 
-            this.TextBox.Text = "Player 1: Click on any square!";
+            this.TextBox.Text = "Right click on board for options, otherwise click a square!";
         }
 
         /// <summary>
