@@ -14,6 +14,7 @@ namespace SuperTicTacToe
     using System.Text;
     using System.Threading.Tasks;
     using System.Windows.Forms;
+    using System.Threading;
 
     /// <summary>
     /// WinForms Interface, runs the main board.
@@ -86,12 +87,12 @@ namespace SuperTicTacToe
         }
 
         /// <summary>
-        /// Updates the text given the global tile # and the player.
+        /// Receives the player's move and updates the board.
         /// </summary>
         /// <param name="globalTile">globalTile.</param>
         /// <param name="player">player.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void UpdateText(int globalTile, bool player)
+        private void PlayerMove(int globalTile, bool player)
         {
             if (this.gameWon)
             {
@@ -174,17 +175,17 @@ namespace SuperTicTacToe
             }
 
             // New ai based on neural network (no learning yet, just random weights)
-            board = this.SmartAIButtonClick();
+            board = this.AIMove();
 
             this.TieDetector(board);
         }
 
         /// <summary>
-        /// Simulates the button click for the AI.
+        /// Retrieves the AI's move and updates the board.
         /// </summary>
         /// <returns>The tile chosen.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private int SmartAIButtonClick()
+        private int AIMove()
         {
             (int[], int[], int) state = this.ttt.GetGameInfo();
 
@@ -407,11 +408,19 @@ namespace SuperTicTacToe
 
         private void Train10GenerationsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            int generationsToTrain = 10;
             this.TextBox.Text = "Training... ";
+            this.UpdateGUI();
+            Thread generationThread;
 
             for (int i = 0; i < 10; i++)
             {
-                this.g.NextGeneration();
+                generationThread = new Thread(this.g.NextGeneration);
+                ////this.g.NextGeneration();
+                generationThread.Start();
+                generationThread.Join();
+                this.TextBox.Text = "Training... Generation " + (i + 1).ToString() + "/" + generationsToTrain.ToString() + " completed.";
+                this.UpdateGUI();
             }
 
             this.ai = this.g.AIS[0];
@@ -419,409 +428,421 @@ namespace SuperTicTacToe
             this.TextBox.Text = "Current Generation: " + this.g.GetGeneration.ToString();
         }
 
+        /// <summary>
+        /// Update the GUI instantly instead of when a method ends.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void UpdateGUI()
+        {
+            this.Invalidate();
+            this.Update();
+            this.Refresh();
+            Application.DoEvents();
+        }
+
         private void TLTL_Click(object sender, EventArgs e)
         {
-            this.UpdateText(0, true);
+            this.PlayerMove(0, true);
         }
 
         private void TMTL_Click(object sender, EventArgs e)
         {
-            this.UpdateText(9, true);
+            this.PlayerMove(9, true);
         }
 
         private void TRTL_Click(object sender, EventArgs e)
         {
-           this.UpdateText(18, true);
+           this.PlayerMove(18, true);
         }
 
         private void MLTL_Click(object sender, EventArgs e)
         {
-            this.UpdateText(27, true);
+            this.PlayerMove(27, true);
         }
 
         private void MMTL_Click(object sender, EventArgs e)
         {
-            this.UpdateText(36, true);
+            this.PlayerMove(36, true);
         }
 
         private void MRTL_Click(object sender, EventArgs e)
         {
-            this.UpdateText(45, true);
+            this.PlayerMove(45, true);
         }
 
         private void BLTL_Click(object sender, EventArgs e)
         {
-            this.UpdateText(54, true);
+            this.PlayerMove(54, true);
         }
 
         private void BMTL_Click(object sender, EventArgs e)
         {
-            this.UpdateText(63, true);
+            this.PlayerMove(63, true);
         }
 
         private void BRTL_Click(object sender, EventArgs e)
         {
-            this.UpdateText(72, true);
+            this.PlayerMove(72, true);
         }
 
         private void TLTM_Click(object sender, EventArgs e)
         {
-            this.UpdateText(1, true);
+            this.PlayerMove(1, true);
         }
 
         private void TMTM_Click(object sender, EventArgs e)
         {
-            this.UpdateText(10, true);
+            this.PlayerMove(10, true);
         }
 
         private void TRTM_Click(object sender, EventArgs e)
         {
-            this.UpdateText(19, true);
+            this.PlayerMove(19, true);
         }
 
         private void MLTM_Click(object sender, EventArgs e)
         {
-            this.UpdateText(28, true);
+            this.PlayerMove(28, true);
         }
 
         private void MMTM_Click(object sender, EventArgs e)
         {
-            this.UpdateText(37, true);
+            this.PlayerMove(37, true);
         }
 
         private void MRTM_Click(object sender, EventArgs e)
         {
-            this.UpdateText(46, true);
+            this.PlayerMove(46, true);
         }
 
         private void BLTM_Click(object sender, EventArgs e)
         {
-            this.UpdateText(55, true);
+            this.PlayerMove(55, true);
         }
 
         private void BMTM_Click(object sender, EventArgs e)
         {
-            this.UpdateText(64, true);
+            this.PlayerMove(64, true);
         }
 
         private void BRTM_Click(object sender, EventArgs e)
         {
-            this.UpdateText(73, true);
+            this.PlayerMove(73, true);
         }
 
         private void TLTR_Click(object sender, EventArgs e)
         {
-            this.UpdateText(2, true);
+            this.PlayerMove(2, true);
         }
 
         private void TMTR_Click(object sender, EventArgs e)
         {
-            this.UpdateText(11, true);
+            this.PlayerMove(11, true);
         }
 
         private void TRTR_Click(object sender, EventArgs e)
         {
-            this.UpdateText(20, true);
+            this.PlayerMove(20, true);
         }
 
         private void MLTR_Click(object sender, EventArgs e)
         {
-            this.UpdateText(29, true);
+            this.PlayerMove(29, true);
         }
 
         private void MMTR_Click(object sender, EventArgs e)
         {
-            this.UpdateText(38, true);
+            this.PlayerMove(38, true);
         }
 
         private void MRTR_Click(object sender, EventArgs e)
         {
-            this.UpdateText(47, true);
+            this.PlayerMove(47, true);
         }
 
         private void BLTR_Click(object sender, EventArgs e)
         {
-            this.UpdateText(56, true);
+            this.PlayerMove(56, true);
         }
 
         private void BMTR_Click(object sender, EventArgs e)
         {
-            this.UpdateText(65, true);
+            this.PlayerMove(65, true);
         }
 
         private void BRTR_Click(object sender, EventArgs e)
         {
-            this.UpdateText(74, true);
+            this.PlayerMove(74, true);
         }
 
         private void TLML_Click(object sender, EventArgs e)
         {
-            this.UpdateText(3, true);
+            this.PlayerMove(3, true);
         }
 
         private void TMML_Click(object sender, EventArgs e)
         {
-            this.UpdateText(12, true);
+            this.PlayerMove(12, true);
         }
 
         private void TRML_Click(object sender, EventArgs e)
         {
-            this.UpdateText(21, true);
+            this.PlayerMove(21, true);
         }
 
         private void MLML_Click(object sender, EventArgs e)
         {
-            this.UpdateText(30, true);
+            this.PlayerMove(30, true);
         }
 
         private void MMML_Click(object sender, EventArgs e)
         {
-            this.UpdateText(39, true);
+            this.PlayerMove(39, true);
         }
 
         private void MRML_Click(object sender, EventArgs e)
         {
-            this.UpdateText(48, true);
+            this.PlayerMove(48, true);
         }
 
         private void BLML_Click(object sender, EventArgs e)
         {
-            this.UpdateText(57, true);
+            this.PlayerMove(57, true);
         }
 
         private void BMML_Click(object sender, EventArgs e)
         {
-            this.UpdateText(66, true);
+            this.PlayerMove(66, true);
         }
 
         private void BRML_Click(object sender, EventArgs e)
         {
-            this.UpdateText(75, true);
+            this.PlayerMove(75, true);
         }
 
         private void TLMM_Click(object sender, EventArgs e)
         {
-            this.UpdateText(4, true);
+            this.PlayerMove(4, true);
         }
 
         private void TMMM_Click(object sender, EventArgs e)
         {
-            this.UpdateText(13, true);
+            this.PlayerMove(13, true);
         }
 
         private void TRMM_Click(object sender, EventArgs e)
         {
-            this.UpdateText(22, true);
+            this.PlayerMove(22, true);
         }
 
         private void MLMM_Click(object sender, EventArgs e)
         {
-            this.UpdateText(31, true);
+            this.PlayerMove(31, true);
         }
 
         private void MMMM_Click(object sender, EventArgs e)
         {
-            this.UpdateText(40, true);
+            this.PlayerMove(40, true);
         }
 
         private void MRMM_Click(object sender, EventArgs e)
         {
-            this.UpdateText(49, true);
+            this.PlayerMove(49, true);
         }
 
         private void BLMM_Click(object sender, EventArgs e)
         {
-            this.UpdateText(58, true);
+            this.PlayerMove(58, true);
         }
 
         private void BMMM_Click(object sender, EventArgs e)
         {
-            this.UpdateText(67, true);
+            this.PlayerMove(67, true);
         }
 
         private void BRMM_Click(object sender, EventArgs e)
         {
-            this.UpdateText(76, true);
+            this.PlayerMove(76, true);
         }
 
         private void TLMR_Click(object sender, EventArgs e)
         {
-            this.UpdateText(5, true);
+            this.PlayerMove(5, true);
         }
 
         private void TMMR_Click(object sender, EventArgs e)
         {
-            this.UpdateText(14, true);
+            this.PlayerMove(14, true);
         }
 
         private void TRMR_Click(object sender, EventArgs e)
         {
-            this.UpdateText(23, true);
+            this.PlayerMove(23, true);
         }
 
         private void MLMR_Click(object sender, EventArgs e)
         {
-            this.UpdateText(32, true);
+            this.PlayerMove(32, true);
         }
 
         private void MMMR_Click(object sender, EventArgs e)
         {
-            this.UpdateText(41, true);
+            this.PlayerMove(41, true);
         }
 
         private void MRMR_Click(object sender, EventArgs e)
         {
-            this.UpdateText(50, true);
+            this.PlayerMove(50, true);
         }
 
         private void BLMR_Click(object sender, EventArgs e)
         {
-            this.UpdateText(59, true);
+            this.PlayerMove(59, true);
         }
 
         private void BMMR_Click(object sender, EventArgs e)
         {
-            this.UpdateText(68, true);
+            this.PlayerMove(68, true);
         }
 
         private void BRMR_Click(object sender, EventArgs e)
         {
-            this.UpdateText(77, true);
+            this.PlayerMove(77, true);
         }
 
         private void TLBL_Click(object sender, EventArgs e)
         {
-            this.UpdateText(6, true);
+            this.PlayerMove(6, true);
         }
 
         private void TMBL_Click(object sender, EventArgs e)
         {
-            this.UpdateText(15, true);
+            this.PlayerMove(15, true);
         }
 
         private void TRBL_Click(object sender, EventArgs e)
         {
-            this.UpdateText(24, true);
+            this.PlayerMove(24, true);
         }
 
         private void MLBL_Click(object sender, EventArgs e)
         {
-            this.UpdateText(33, true);
+            this.PlayerMove(33, true);
         }
 
         private void MMBL_Click(object sender, EventArgs e)
         {
-            this.UpdateText(42, true);
+            this.PlayerMove(42, true);
         }
 
         private void MRBL_Click(object sender, EventArgs e)
         {
-            this.UpdateText(51, true);
+            this.PlayerMove(51, true);
         }
 
         private void BLBL_Click(object sender, EventArgs e)
         {
-            this.UpdateText(60, true);
+            this.PlayerMove(60, true);
         }
 
         private void BMBL_Click(object sender, EventArgs e)
         {
-            this.UpdateText(69, true);
+            this.PlayerMove(69, true);
         }
 
         private void BRBL_Click(object sender, EventArgs e)
         {
-            this.UpdateText(78, true);
+            this.PlayerMove(78, true);
         }
 
         private void TLBM_Click(object sender, EventArgs e)
         {
-            this.UpdateText(7, true);
+            this.PlayerMove(7, true);
         }
 
         private void TMBM_Click(object sender, EventArgs e)
         {
-            this.UpdateText(16, true);
+            this.PlayerMove(16, true);
         }
 
         private void TRBM_Click(object sender, EventArgs e)
         {
-            this.UpdateText(25, true);
+            this.PlayerMove(25, true);
         }
 
         private void MLBM_Click(object sender, EventArgs e)
         {
-            this.UpdateText(34, true);
+            this.PlayerMove(34, true);
         }
 
         private void MMBM_Click(object sender, EventArgs e)
         {
-            this.UpdateText(43, true);
+            this.PlayerMove(43, true);
         }
 
         private void MRBM_Click(object sender, EventArgs e)
         {
-            this.UpdateText(52, true);
+            this.PlayerMove(52, true);
         }
 
         private void BLBM_Click(object sender, EventArgs e)
         {
-            this.UpdateText(61, true);
+            this.PlayerMove(61, true);
         }
 
         private void BMBM_Click(object sender, EventArgs e)
         {
-            this.UpdateText(70, true);
+            this.PlayerMove(70, true);
         }
 
         private void BRBM_Click(object sender, EventArgs e)
         {
-            this.UpdateText(79, true);
+            this.PlayerMove(79, true);
         }
 
         private void TLBR_Click(object sender, EventArgs e)
         {
-            this.UpdateText(8, true);
+            this.PlayerMove(8, true);
         }
 
         private void TMBR_Click(object sender, EventArgs e)
         {
-            this.UpdateText(17, true);
+            this.PlayerMove(17, true);
         }
 
         private void TRBR_Click(object sender, EventArgs e)
         {
-            this.UpdateText(26, true);
+            this.PlayerMove(26, true);
         }
 
         private void MLBR_Click(object sender, EventArgs e)
         {
-            this.UpdateText(35, true);
+            this.PlayerMove(35, true);
         }
 
         private void MMBR_Click(object sender, EventArgs e)
         {
-            this.UpdateText(44, true);
+            this.PlayerMove(44, true);
         }
 
         private void MRBR_Click(object sender, EventArgs e)
         {
-            this.UpdateText(53, true);
+            this.PlayerMove(53, true);
         }
 
         private void BLBR_Click(object sender, EventArgs e)
         {
-            this.UpdateText(62, true);
+            this.PlayerMove(62, true);
         }
 
         private void BMBR_Click(object sender, EventArgs e)
         {
-            this.UpdateText(71, true);
+            this.PlayerMove(71, true);
         }
 
         private void BRBR_Click(object sender, EventArgs e)
         {
-            this.UpdateText(80, true);
+            this.PlayerMove(80, true);
         }
     }
 }
