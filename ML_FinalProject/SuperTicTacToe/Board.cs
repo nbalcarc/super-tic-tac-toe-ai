@@ -45,14 +45,19 @@ namespace SuperTicTacToe
         private bool gameWon;
         private bool generationLoop;
 
+        private int interrupt;
+        private string interruptString;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Board"/> class.
         /// </summary>
         public Board()
         {
             this.InitializeComponent();
+            Application.Idle += this.HandleApplicationIdle;
             this.gameWon = false;
             this.generationLoop = false;
+            this.interrupt = 0;
 
             this.buttons = new Button[81]
             {
@@ -68,6 +73,31 @@ namespace SuperTicTacToe
             };
 
             this.highlights = new PictureBox[9] { this.TL, this.TM, this.TR, this.ML, this.MM, this.MR, this.BL, this.BM, this.BR };
+        }
+
+        /// <summary>
+        /// Should be called when the GUI goes idle. If there is an interrupt, it will be handled here.
+        /// </summary>
+        /// /// <param name="sender">sender.</param>
+        /// /// <param name="e">e.</param>
+        public void HandleApplicationIdle(object sender, EventArgs e)
+        {
+            if (this.interrupt != 0)
+            {
+                switch (this.interrupt)
+                {
+                    // Update textbox display.
+                    case 1:
+                        Console.WriteLine("bing bang");
+                        this.TextBox.Text = this.interruptString;
+                        this.UpdateGUI();
+                        break;
+                    default:
+                        break;
+                }
+
+                this.interrupt = 0;
+            }
         }
 
         private void Board_Load(object sender, EventArgs e)
@@ -457,7 +487,7 @@ namespace SuperTicTacToe
                 this.TextBox.Text = "Ending training session... ";
                 this.UpdateGUI();
                 this.generationThread.Join();
-                this.TextBox.Text = "Completed training on Generation x";
+                this.TextBox.Text = "Completed training on Generation " + this.g.GetGeneration.ToString();
                 this.trainingMenuItem.Text = "Start Training";
             }
         }
@@ -467,9 +497,41 @@ namespace SuperTicTacToe
         /// </summary>
         private void TrainingLoop()
         {
+            int generation = this.g.GetGeneration;
+            string text = string.Empty;
+            int updateText = 2;
+
             while (this.generationLoop)
             {
-                Thread.Sleep(3000);
+                this.g.NextGeneration();
+
+                if (updateText == 0)
+                {
+                    continue;
+                }
+
+                switch (updateText)
+                {
+                    case 1:
+                        if (text.Equals(this.TextBox.Text))
+                        {
+                            text = "Training... Generation " + this.g.GetGeneration.ToString() + " completed.";
+                            this.interruptString = text;
+                            this.interrupt = 1;
+                        }
+                        else
+                        {
+                            updateText = 0;
+                        }
+
+                        break;
+                    case 2:
+                        text = "Training... Generation " + this.g.GetGeneration.ToString() + " completed.";
+                        this.interruptString = text;
+                        this.interrupt = 1;
+                        updateText = 1;
+                        break;
+                }
             }
         }
 

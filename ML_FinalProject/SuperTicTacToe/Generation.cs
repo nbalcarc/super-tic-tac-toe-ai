@@ -20,7 +20,7 @@ namespace SuperTicTacToe
 {
     using System;
     using System.Runtime.CompilerServices;
-    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Class for the Generation algorithm.
@@ -46,7 +46,7 @@ namespace SuperTicTacToe
         // "Returns a random floating-point number that is greater than or equal to 0.0, and less than 1.0."
         private Random random = new Random();
 
-        // Stores all the scores of the ais, not used in backup however
+        // Used to order the AI's after their matches, not stored in database
         private int[] scores;
 
         // Number of ais per generation
@@ -213,9 +213,9 @@ namespace SuperTicTacToe
             this.generationBack1 = this.generationBack;
             this.generationBack = this.generation;
             this.generation++;
-            int[] rewards = new int[this.aiNum];
-            (int, int) rewards_game;
-            AI ai, ai1;
+            //int[] rewards = new int[this.aiNum];
+            //(int, int) rewards_game;
+            //AI ai, ai1;
 
             // now we evolve the current generation TODO
             // if (generation == 0)
@@ -224,7 +224,8 @@ namespace SuperTicTacToe
             // }
             // else
             // { //make all AIs play the top 5 AIs 3 times (used to assess if the top 5 should remain the top 5)
-            for (int i = 0; i < this.aiNum; i++)
+
+            /*for (int i = 0; i < this.aiNum; i++)
             {
                 // Grab the ith ai
                 ai = this.ais[i];
@@ -239,11 +240,20 @@ namespace SuperTicTacToe
                     rewards[i] += rewards_game.Item1;
                 }
             }
+            */
+            Task[] tasks = new Task[this.aiNum];
+            for (int i = 0; i < this.aiNum; i++)
+            {
+                int temp = i;
+                tasks[i] = Task.Run(() => this.RunGames(temp));
+            }
+
+            Task.WaitAll(tasks);
 
             // Sort the ais array based on the scores
-            Array.Sort(rewards, this.ais);
+            Array.Sort(this.scores, this.ais);
 
-            // Kill off about half the generation, for now just kill the bottom half, and repopulate
+            // Kill off about half the generation; for now just kill the bottom half, and repopulate
             Random r = new Random();
 
             for (int i = this.aiNum / 2; i < this.aiNum; i++)
@@ -253,7 +263,28 @@ namespace SuperTicTacToe
         }
 
         /// <summary>
-        /// Plays 3 games, and returns a score for each AI TODO.
+        /// Plays 3 games, and returns a score for each AI. Runs concurrently.
+        /// </summary>
+        /// <param name="num">num.</param>
+        public void RunGames(int num)
+        {
+            AI ai = this.ais[num];
+            AI ai1;
+            (int, int) rewards_game;
+
+            // All top 5 ais
+            for (int j = 0; j < 5; j++)
+            {
+                ai1 = this.ais[j];
+                rewards_game = this.PlayGames(ai, ai1);
+
+                // Add the reward from this game to the total of all 5 games
+                this.scores[num] += rewards_game.Item1;
+            }
+        }
+
+        /// <summary>
+        /// Plays 3 games, and returns a score for each AI.
         /// </summary>
         /// <param name="ai">ai.</param>
         /// <param name="ai1">ai1.</param>
@@ -277,7 +308,7 @@ namespace SuperTicTacToe
                 playing = true;
                 while (playing)
                 {
-                    Console.WriteLine("trapped in this loop eyyyyyyyyyyyyyyyyyyy whats up homie");
+                    // Console.WriteLine("trapped in this loop eyyyyyyyyyyyyyyyyyyy whats up homie");
                     if (turn)
                     {
                         result = this.AIMove(ai, game);
