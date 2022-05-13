@@ -88,7 +88,6 @@ namespace SuperTicTacToe
                 {
                     // Update textbox display.
                     case 1:
-                        Console.WriteLine("bing bang");
                         this.TextBox.Text = this.interruptString;
                         this.UpdateGUI();
                         break;
