@@ -1,4 +1,6 @@
-﻿// <copyright file="Board.cs" company="Adam Nassar &amp; Nathan Balcarcel">
+﻿// <copyright file="Board.cs" company="Adam Nassar and Nathan Balcarcel">
+// Copyright (C) 2022  Adam Nassar and Nathan Balcarcel
+//
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
 // as published by the Free Software Foundation; either version 2
@@ -38,8 +40,10 @@ namespace SuperTicTacToe
         private Generation g = new Generation();
         private Game ttt = new Game();
         private AI ai = new AI();
+        private Thread generationThread;
 
         private bool gameWon;
+        private bool generationLoop;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Board"/> class.
@@ -47,14 +51,8 @@ namespace SuperTicTacToe
         public Board()
         {
             this.InitializeComponent();
-
-            // ttt.focus_board = 8;
-            // for (int i= 0; i < 8; i++)
-            // {
-            //     ttt.Tiles[81 + i] = -2;
-            //     ttt.Tiles_inverted[81 + i] = -2
-            // }
             this.gameWon = false;
+            this.generationLoop = false;
 
             this.buttons = new Button[81]
             {
@@ -439,8 +437,44 @@ namespace SuperTicTacToe
             this.TextBox.Text = "Current Generation: " + this.g.GetGeneration.ToString();
         }
 
+        private void TrainingMenuItem_Click(object sender, EventArgs e)
+        {
+            this.generationLoop = !this.generationLoop;
+
+            // Begin training loop
+            if (this.generationLoop)
+            {
+                this.TextBox.Text = "Initiating training session... ";
+                this.generationThread = new Thread(this.TrainingLoop);
+                this.generationThread.IsBackground = true;
+                this.generationThread.Start();
+                this.trainingMenuItem.Text = "End Training";
+            }
+
+            // End training loop
+            else
+            {
+                this.TextBox.Text = "Ending training session... ";
+                this.UpdateGUI();
+                this.generationThread.Join();
+                this.TextBox.Text = "Completed training on Generation x";
+                this.trainingMenuItem.Text = "Start Training";
+            }
+        }
+
         /// <summary>
-        /// Update the GUI instantly instead of when a method ends.
+        /// The main training loop. Controlled via a toggleable menu item.
+        /// </summary>
+        private void TrainingLoop()
+        {
+            while (this.generationLoop)
+            {
+                Thread.Sleep(3000);
+            }
+        }
+
+        /// <summary>
+        /// Updates the GUI instantly instead of when a method ends.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void UpdateGUI()

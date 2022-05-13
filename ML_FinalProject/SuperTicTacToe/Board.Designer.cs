@@ -127,8 +127,9 @@
             this.MR = new System.Windows.Forms.PictureBox();
             this.BM = new System.Windows.Forms.PictureBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.resetBoardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.train10GenerationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetBoardMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.train10MenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.trainingMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
@@ -1107,24 +1108,32 @@
             // 
             this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.resetBoardToolStripMenuItem,
-            this.train10GenerationsToolStripMenuItem});
+            this.resetBoardMenuItem,
+            this.train10MenuItem,
+            this.trainingMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(214, 52);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 92);
             // 
-            // resetBoardToolStripMenuItem
+            // resetBoardMenuItem
             // 
-            this.resetBoardToolStripMenuItem.Name = "resetBoardToolStripMenuItem";
-            this.resetBoardToolStripMenuItem.Size = new System.Drawing.Size(213, 24);
-            this.resetBoardToolStripMenuItem.Text = "Reset Board";
-            this.resetBoardToolStripMenuItem.Click += new System.EventHandler(this.ResetBoardToolStripMenuItem_Click);
+            this.resetBoardMenuItem.Name = "resetBoardMenuItem";
+            this.resetBoardMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.resetBoardMenuItem.Text = "Reset Board";
+            this.resetBoardMenuItem.Click += new System.EventHandler(this.ResetBoardToolStripMenuItem_Click);
             // 
-            // train10GenerationsToolStripMenuItem
+            // train10MenuItem
             // 
-            this.train10GenerationsToolStripMenuItem.Name = "train10GenerationsToolStripMenuItem";
-            this.train10GenerationsToolStripMenuItem.Size = new System.Drawing.Size(213, 24);
-            this.train10GenerationsToolStripMenuItem.Text = "Train 10 Generations";
-            this.train10GenerationsToolStripMenuItem.Click += new System.EventHandler(this.Train10GenerationsToolStripMenuItem_Click);
+            this.train10MenuItem.Name = "train10MenuItem";
+            this.train10MenuItem.Size = new System.Drawing.Size(180, 22);
+            this.train10MenuItem.Text = "Train 10 Generations";
+            this.train10MenuItem.Click += new System.EventHandler(this.Train10GenerationsToolStripMenuItem_Click);
+            // 
+            // trainingMenuItem
+            // 
+            this.trainingMenuItem.Name = "trainingMenuItem";
+            this.trainingMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.trainingMenuItem.Text = "Start Training";
+            this.trainingMenuItem.Click += new System.EventHandler(this.TrainingMenuItem_Click);
             // 
             // Board
             // 
@@ -1355,8 +1364,9 @@
 		private System.Windows.Forms.PictureBox MR;
 		private System.Windows.Forms.PictureBox BM;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem resetBoardToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem train10GenerationsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem resetBoardMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem train10MenuItem;
+        private System.Windows.Forms.ToolStripMenuItem trainingMenuItem;
     }
 }
 
