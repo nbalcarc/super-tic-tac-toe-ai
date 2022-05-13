@@ -194,6 +194,15 @@ namespace SuperTicTacToe
                         this.highlights[i].Visible = false;
                     }
 
+                    // Local win on the last-played board
+                    if (this.ttt.GetGameInfo().Item1[81 + board] == 1)
+                    {
+                        for (int i = 0; i < 9; i++)
+                        {
+                            this.buttons[(board * 9) + i].BackColor = Color.Aquamarine;
+                        }
+                    }
+
                     this.TextBox.Text = "Player 1 Wins!";
                     this.gameWon = true;
 
@@ -277,19 +286,6 @@ namespace SuperTicTacToe
                     }
 
                     break;
-                case 2:
-                    // Global win
-                    this.buttons[(board * 9) + localTile].Text = "O";
-
-                    for (int i = 0; i < 9; i++)
-                    {
-                        this.highlights[i].Visible = false;
-                    }
-
-                    this.TextBox.Text = "AI Wins!";
-                    this.gameWon = true;
-
-                    return board;
                 case 1:
                     // Local win
                     this.buttons[(board * 9) + localTile].Text = "O";
@@ -316,6 +312,28 @@ namespace SuperTicTacToe
                     this.TextBox.Text = "AI has claimed board " + board;
 
                     break;
+                case 2:
+                    // Global win
+                    this.buttons[(board * 9) + localTile].Text = "O";
+
+                    for (int i = 0; i < 9; i++)
+                    {
+                        this.highlights[i].Visible = false;
+                    }
+
+                    // Local win on the last-played board
+                    if (this.ttt.GetGameInfo().Item2[81 + board] == 1)
+                    {
+                        for (int i = 0; i < 9; i++)
+                        {
+                            this.buttons[(board * 9) + i].BackColor = Color.OrangeRed;
+                        }
+                    }
+
+                    this.TextBox.Text = "AI Wins!";
+                    this.gameWon = true;
+
+                    return board;
             }
 
             // Update the new info
@@ -405,12 +423,12 @@ namespace SuperTicTacToe
             return false;
         }
 
-        private void ResetBoardToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ResetBoardMenuItem_Click(object sender, EventArgs e)
         {
             foreach (Button b in this.buttons)
             {
                 b.Text = string.Empty;
-                b.BackColor = Color.White;
+                b.BackColor = Color.FromArgb(225, 225, 225);
             }
 
             for (int i = 0; i < 9; i++)
@@ -423,27 +441,6 @@ namespace SuperTicTacToe
             this.ttt = new Game();
         }
 
-        private void Train10GenerationsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            int generationsToTrain = 10;
-            this.TextBox.Text = "Training... ";
-            this.UpdateGUI();
-            Thread generationThread;
-
-            for (int i = 0; i < 10; i++)
-            {
-                generationThread = new Thread(this.g.NextGeneration);
-                generationThread.Start();
-                generationThread.Join();
-                this.TextBox.Text = "Training... Generation " + (i + 1).ToString() + "/" + generationsToTrain.ToString() + " completed.";
-                this.UpdateGUI();
-            }
-
-            this.ai = this.g.AIS[0];
-
-            this.TextBox.Text = "Current Generation: " + this.g.GetGeneration.ToString();
-        }
-
         private void TrainingMenuItem_Click(object sender, EventArgs e)
         {
             this.generationLoop = !this.generationLoop;
@@ -451,6 +448,7 @@ namespace SuperTicTacToe
             // Begin training loop
             if (this.generationLoop)
             {
+                this.interrupt = 0;
                 this.TextBox.Text = "Initiating training session... ";
                 this.generationThread = new Thread(this.TrainingLoop);
                 this.generationThread.IsBackground = true;
@@ -461,10 +459,11 @@ namespace SuperTicTacToe
             // End training loop
             else
             {
+                this.interrupt = 0;
                 this.TextBox.Text = "Ending training session... ";
                 this.UpdateGUI();
                 this.generationThread.Join();
-                this.TextBox.Text = "Completed training on Generation " + this.g.GetGeneration.ToString();
+                this.TextBox.Text = "Completed training on Generation " + this.g.GetGeneration.ToString() + ".";
                 this.trainingMenuItem.Text = "Start Training";
                 this.ai = this.g.AIS[0];
             }

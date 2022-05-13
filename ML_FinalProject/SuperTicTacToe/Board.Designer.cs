@@ -126,9 +126,8 @@
             this.TM = new System.Windows.Forms.PictureBox();
             this.MR = new System.Windows.Forms.PictureBox();
             this.BM = new System.Windows.Forms.PictureBox();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.resetBoardMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.train10MenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.trainingMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -144,7 +143,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.TM)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MR)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BM)).BeginInit();
-            this.contextMenuStrip1.SuspendLayout();
+            this.contextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // TLTL
@@ -1104,34 +1103,26 @@
             this.BM.TabStop = false;
             this.BM.Visible = false;
             // 
-            // contextMenuStrip1
+            // contextMenu
             // 
-            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contextMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.resetBoardMenuItem,
-            this.train10MenuItem,
             this.trainingMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 92);
+            this.contextMenu.Name = "contextMenuStrip1";
+            this.contextMenu.Size = new System.Drawing.Size(144, 48);
             // 
             // resetBoardMenuItem
             // 
             this.resetBoardMenuItem.Name = "resetBoardMenuItem";
-            this.resetBoardMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.resetBoardMenuItem.Size = new System.Drawing.Size(143, 22);
             this.resetBoardMenuItem.Text = "Reset Board";
-            this.resetBoardMenuItem.Click += new System.EventHandler(this.ResetBoardToolStripMenuItem_Click);
-            // 
-            // train10MenuItem
-            // 
-            this.train10MenuItem.Name = "train10MenuItem";
-            this.train10MenuItem.Size = new System.Drawing.Size(180, 22);
-            this.train10MenuItem.Text = "Train 10 Generations";
-            this.train10MenuItem.Click += new System.EventHandler(this.Train10GenerationsToolStripMenuItem_Click);
+            this.resetBoardMenuItem.Click += new System.EventHandler(this.ResetBoardMenuItem_Click);
             // 
             // trainingMenuItem
             // 
             this.trainingMenuItem.Name = "trainingMenuItem";
-            this.trainingMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.trainingMenuItem.Size = new System.Drawing.Size(143, 22);
             this.trainingMenuItem.Text = "Start Training";
             this.trainingMenuItem.Click += new System.EventHandler(this.TrainingMenuItem_Click);
             // 
@@ -1142,7 +1133,7 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(524, 601);
-            this.ContextMenuStrip = this.contextMenuStrip1;
+            this.ContextMenuStrip = this.contextMenu;
             this.Controls.Add(this.TextBox);
             this.Controls.Add(this.BRBR);
             this.Controls.Add(this.BRBM);
@@ -1259,7 +1250,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.TM)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MR)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.BM)).EndInit();
-            this.contextMenuStrip1.ResumeLayout(false);
+            this.contextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1363,9 +1354,8 @@
 		private System.Windows.Forms.PictureBox TM;
 		private System.Windows.Forms.PictureBox MR;
 		private System.Windows.Forms.PictureBox BM;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ContextMenuStrip contextMenu;
         private System.Windows.Forms.ToolStripMenuItem resetBoardMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem train10MenuItem;
         private System.Windows.Forms.ToolStripMenuItem trainingMenuItem;
     }
 }
