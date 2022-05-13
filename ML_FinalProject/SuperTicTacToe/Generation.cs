@@ -213,39 +213,13 @@ namespace SuperTicTacToe
             this.generationBack1 = this.generationBack;
             this.generationBack = this.generation;
             this.generation++;
-            //int[] rewards = new int[this.aiNum];
-            //(int, int) rewards_game;
-            //AI ai, ai1;
 
-            // now we evolve the current generation TODO
-            // if (generation == 0)
-            // { //if the current generation is the very first, make all AIs play 3 games against 5 other AIs
-            //     int[] games = new int[500]; //stores how many games each AI has played, all must be at least 5
-            // }
-            // else
-            // { //make all AIs play the top 5 AIs 3 times (used to assess if the top 5 should remain the top 5)
-
-            /*for (int i = 0; i < this.aiNum; i++)
-            {
-                // Grab the ith ai
-                ai = this.ais[i];
-
-                // All top 5 ais
-                for (int j = 0; j < 5; j++)
-                {
-                    ai1 = this.ais[j];
-                    rewards_game = this.PlayGames(ai, ai1);
-
-                    // Add the reward from this game to the total of all 5 games
-                    rewards[i] += rewards_game.Item1;
-                }
-            }
-            */
             Task[] tasks = new Task[this.aiNum];
             for (int i = 0; i < this.aiNum; i++)
             {
+                // For some reason, creating an integer here solves many problems that arised with Tasks
                 int temp = i;
-                tasks[i] = Task.Run(() => this.RunGames(temp));
+                tasks[temp] = Task.Run(() => this.RunGames(temp));
             }
 
             Task.WaitAll(tasks);
@@ -273,9 +247,9 @@ namespace SuperTicTacToe
             (int, int) rewards_game;
 
             // All top 5 ais
-            for (int j = 0; j < 5; j++)
+            for (int i = 0; i < 5; i++)
             {
-                ai1 = this.ais[j];
+                ai1 = this.ais[i];
                 rewards_game = this.PlayGames(ai, ai1);
 
                 // Add the reward from this game to the total of all 5 games
@@ -308,7 +282,6 @@ namespace SuperTicTacToe
                 playing = true;
                 while (playing)
                 {
-                    // Console.WriteLine("trapped in this loop eyyyyyyyyyyyyyyyyyyy whats up homie");
                     if (turn)
                     {
                         result = this.AIMove(ai, game);

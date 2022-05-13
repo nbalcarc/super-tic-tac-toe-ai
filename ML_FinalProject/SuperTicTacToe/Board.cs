@@ -190,13 +190,6 @@ namespace SuperTicTacToe
                     // Global win
                     this.buttons[globalTile].Text = "X";
 
-                    /*
-                    for (int i = 0; i < 81; i++)
-                    {
-                        buttons[i].BackColor = Color.Aquamarine;
-                    }
-                    */
-
                     for (int i = 0; i < 9; i++)
                     {
                         this.highlights[i].Visible = false;
@@ -231,16 +224,12 @@ namespace SuperTicTacToe
             // First either choose a new board or pass the current one
             if (state.Item3 == -1)
             {
-                Console.WriteLine($"DEBUGGING, choosing board");
                 this.ttt.ChooseBoardSecondPlayer(this.ai.ChooseBoard(state.Item2, false));
             }
             else
             {
-                Console.WriteLine($"DEBUGGING, reusing board");
                 this.ttt.ChooseBoardSecondPlayer(state.Item3);
             }
-
-            Console.WriteLine($"DEBUGGING board: {state.Item3}");
 
             int resultPlace, localTile, board;
 
@@ -250,9 +239,6 @@ namespace SuperTicTacToe
             localTile = this.ai.NextMove(state.Item2, state.Item3);
             resultPlace = this.ttt.PlaceSecondPlayer(localTile);
             board = state.Item3;
-
-            Console.WriteLine($"DEBUGGING tile: {localTile}");
-            Console.WriteLine($"DEBUGGING result: {resultPlace}");
 
             int tempBoard;
 
@@ -295,13 +281,6 @@ namespace SuperTicTacToe
                 case 2:
                     // Global win
                     this.buttons[(board * 9) + localTile].Text = "O";
-
-                    /*
-                    for (int i = 0; i < 81; i++) //claim all tiles
-                    {
-                        buttons[i].BackColor = Color.OrangeRed;
-                    }
-                    */
 
                     for (int i = 0; i < 9; i++)
                     {
@@ -455,7 +434,6 @@ namespace SuperTicTacToe
             for (int i = 0; i < 10; i++)
             {
                 generationThread = new Thread(this.g.NextGeneration);
-                ////this.g.NextGeneration();
                 generationThread.Start();
                 generationThread.Join();
                 this.TextBox.Text = "Training... Generation " + (i + 1).ToString() + "/" + generationsToTrain.ToString() + " completed.";
@@ -489,6 +467,7 @@ namespace SuperTicTacToe
                 this.generationThread.Join();
                 this.TextBox.Text = "Completed training on Generation " + this.g.GetGeneration.ToString();
                 this.trainingMenuItem.Text = "Start Training";
+                this.ai = this.g.AIS[0];
             }
         }
 
@@ -497,10 +476,13 @@ namespace SuperTicTacToe
         /// </summary>
         private void TrainingLoop()
         {
-            int generation = this.g.GetGeneration;
-            string text = string.Empty;
+
+            // Used to decide if we should send an interrupt, 2 = first round, 1 = send interrupt, 0 = don't send interrupt
             int updateText = 2;
 
+            string text = string.Empty;
+
+            // While we are still allowed to keep training
             while (this.generationLoop)
             {
                 this.g.NextGeneration();
@@ -513,12 +495,16 @@ namespace SuperTicTacToe
                 switch (updateText)
                 {
                     case 1:
+
+                        // If there has been no update to the text since our last interrupt, update the text
                         if (text.Equals(this.TextBox.Text))
                         {
                             text = "Training... Generation " + this.g.GetGeneration.ToString() + " completed.";
                             this.interruptString = text;
                             this.interrupt = 1;
                         }
+
+                        // If there has been an update to the text, stop sending interrupts
                         else
                         {
                             updateText = 0;
@@ -526,6 +512,8 @@ namespace SuperTicTacToe
 
                         break;
                     case 2:
+
+                        // If first round, switch to interrupting (different on first round so we don't check for string equality)
                         text = "Training... Generation " + this.g.GetGeneration.ToString() + " completed.";
                         this.interruptString = text;
                         this.interrupt = 1;
